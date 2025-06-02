@@ -1,0 +1,3 @@
+C:/Projects/C++/Messenger/server/build/CMakeFiles/messenger_server.dir
+C:/Projects/C++/Messenger/server/build/CMakeFiles/ALL_BUILD.dir
+C:/Projects/C++/Messenger/server/build/CMakeFiles/ZERO_CHECK.dir
