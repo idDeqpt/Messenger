@@ -1,3 +1,3 @@
-/server/bin/
-/server/build/
-/server/backend_server/
+/web_server/bin/
+/web_server/build/
+/backend_server/
