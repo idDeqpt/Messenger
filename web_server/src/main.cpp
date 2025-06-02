@@ -1,5 +1,9 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
+#include <memory>
+
 #include <functional>
 #include <unordered_map>
 #include <utility>
@@ -15,7 +19,56 @@
 #include <windows.h>
 
 
+std::string get_content_type(std::string path)
+{
+    if (path.find(".html") != std::string::npos)
+        return "text/html";
+    if (path.find(".css") != std::string::npos)
+        return "text/css";
+    if (path.find(".js") != std::string::npos)
+        return "application/javascript";
+    return "text/plane";
+}
 
+
+std::unique_ptr<std::string> load_file_data_ptr(std::string path)
+{
+    std::cout << "FILE PATH: |" << path << "|\n";
+    std::ifstream file(path);
+
+    if (!file)
+        return std::unique_ptr<std::string>(nullptr);
+
+
+    std::ostringstream oss;
+    oss << file.rdbuf();
+
+    std::cout << "FILE TEXT: |" << oss.str() << "|\n";
+    return std::make_unique<std::string>(oss.str());//str);
+}
+
+
+std::string http_handler(net::HTTPServer& server, std::string request)
+{
+    net::HTTPResponse response;
+    net::HTTPRequest req(request);
+    net::URI uri(req.start_line[1]);
+    std::string path = uri.toString(false);
+
+    std::unique_ptr<std::string> data_ptr = load_file_data_ptr("resources" + path);
+    if (data_ptr == nullptr)
+        return server.get404Handler()().toString();
+
+    response.body = *data_ptr;
+    response.start_line[0] = "HTTP/1.1";
+    response.start_line[1] = "200";
+    response.start_line[2] = "OK";
+    response.headers["Version"] = "HTTP/1.1";
+    response.headers["Content-Type"] = get_content_type(path) + "; charset=utf-8";
+    response.headers["Content-Length"] = std::to_string(response.body.length());
+
+    return response.toString();
+}
 
 
 int main()
@@ -35,28 +88,7 @@ int main()
     };
 
     net::HTTPServer server;
-    addHandlers(server);
-
-
-    server.addHandler("/test", [](net::HTTPRequest request) -> net::HTTPResponse
-    {
-        net::HTTPResponse response;
-        net::URI uri(request.start_line[1]);
-        std::cout << request.toString() << std::endl;
-
-        response.body = "answer!!!!!!!!!!!!!!!!!!!";
-
-        response.start_line[0] = "HTTP/1.1";
-        response.start_line[1] = "200";
-        response.start_line[2] = "OK";
-
-        response.headers["Version"] = "HTTP/1.1";
-        response.headers["Content-Type"] = "text/html; charset=utf-8";
-        response.headers["Version"] = "HTTP/1.1";
-        response.headers["Content-Length"] = std::to_string(response.body.length());
-
-        return response;
-    });
+    server.setHTTPHandler(http_handler);
 
     Timer timer;
     while (state != ServerStates::EXIT)
