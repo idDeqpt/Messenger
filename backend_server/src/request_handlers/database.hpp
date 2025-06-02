@@ -13,15 +13,11 @@ namespace db
 	{
 		jst::JSArray* result = static_cast<jst::JSArray*>(data);
 		jst::JSObject obj;
-		std::cout << "CALLBACK\n";
 		for (int i = 0; i < argc; i++)
-		{
-			std::cout << azColName[i] << " " << argv[i] << std::endl;
 			if (argv[i])
 				obj.addField(azColName[i], std::make_shared<jst::JSString>(argv[i]));
 			else
 				obj.addField(azColName[i]);
-		}
 		result->pushBack(std::make_shared<jst::JSObject>(obj));
 		return 0; 
 	}
@@ -34,8 +30,6 @@ namespace db
 	    jst::JSArray result;
 
 	    sqlite3_exec(db, request.c_str(), db::callback, (void*)&result, &errMessage);
-
-	    std::cout << result.toString() << std::endl;
 
 	    return std::make_unique<jst::JSArray>(result);
 	}

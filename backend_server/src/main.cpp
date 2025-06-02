@@ -68,7 +68,7 @@ int main()
                 std::cout << "Start on localhost (\"1\" for accept): ";
                 std::cin >> localhost;
 
-                server.init(80, localhost == "1");
+                server.init(8008, localhost == "1");
                 server.start(1);
 
                 std::cout << "Server address: " << server.getSelfAddress().toString() << std::endl;
