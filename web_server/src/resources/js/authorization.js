@@ -4,5 +4,5 @@ function auth()
 	let password = document.getElementById("password").value;
 	console.log("login: ", login);
 	console.log("password: ", password);
-
+	
 }
