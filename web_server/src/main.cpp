@@ -33,18 +33,14 @@ std::string get_content_type(std::string path)
 
 std::unique_ptr<std::string> load_file_data_ptr(std::string path)
 {
-    std::cout << "FILE PATH: |" << path << "|\n";
     std::ifstream file(path);
 
     if (!file)
         return std::unique_ptr<std::string>(nullptr);
 
-
     std::ostringstream oss;
     oss << file.rdbuf();
-
-    std::cout << "FILE TEXT: |" << oss.str() << "|\n";
-    return std::make_unique<std::string>(oss.str());//str);
+    return std::make_unique<std::string>(oss.str());
 }
 
 
@@ -54,6 +50,10 @@ std::string http_handler(net::HTTPServer& server, std::string request)
     net::HTTPRequest req(request);
     net::URI uri(req.start_line[1]);
     std::string path = uri.toString(false);
+    std::cout << path << std::endl;
+
+    if (path.find(".") == std::string::npos)
+        path += "/index.html";
 
     std::unique_ptr<std::string> data_ptr = load_file_data_ptr("resources" + path);
     if (data_ptr == nullptr)

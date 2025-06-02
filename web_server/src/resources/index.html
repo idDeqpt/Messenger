@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Title string</title>
-		<link rel="stylesheet" href="/css/main_page.css">  
+		<title>Messenger</title>
+		<link rel="stylesheet" href="style.css">
+		<script type="text/javascript" src="js/authorization.js"></script>
 	</head>
 	<body>
-		<div class="text"><a>Main page of messenger</a></div>
+		<div class="main">
+			<table>
+				<tr>
+					<td><a>Логин</a></td>
+					<td><input type="text" id="login"></td>
+				</tr>
+					<td><a>Пароль</a></td>
+					<td><input type="text" id="password"></td>
+				</tr>
+				<tr>
+					<td colspan="2"><button onclick="auth();"><a>Войти</a></button></td>
+				</tr>
+			</table>
+		</div>
 	</body>
 </html>
