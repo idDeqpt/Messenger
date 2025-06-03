@@ -1,13 +1,15 @@
 #ifndef HANDLERS_ADDER_HPP
 #define HANDLERS_ADDER_HPP
 
-#include <Network/HTTPServer.hpp>
 #include <Network/HTTPRequests.hpp>
+#include <Network/HTTPServer.hpp>
+#include <Network/Timer.hpp>
 #include <functional>
 #include <utility>
 #include <string>
 
 #include "request_handlers/authorize_handler.hpp"
+
 
 void addHandlers(net::HTTPServer& server)
 {

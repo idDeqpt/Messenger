@@ -22,7 +22,7 @@ namespace db
 		return 0; 
 	}
 
-	std::unique_ptr<jst::JSBaseType> exec(std::string request)
+	std::shared_ptr<jst::JSArray> exec(std::string request)
 	{
 	    sqlite3 *db;
 	    char *errMessage = 0;
@@ -31,7 +31,7 @@ namespace db
 
 	    sqlite3_exec(db, request.c_str(), db::callback, (void*)&result, &errMessage);
 
-	    return std::make_unique<jst::JSArray>(result);
+	    return std::make_shared<jst::JSArray>(result);
 	}
 }
 

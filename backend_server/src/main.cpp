@@ -2,19 +2,20 @@
 #include <string>
 #include <utility>
 
-#include "request_handlers/database.hpp"
-#include "handlers.hpp"
-
 #include "Network/HTTPServer.hpp"
 #include "Network/ServerSessionData.hpp"
 #include "Network/Timer.hpp"
+
+#include "handlers.hpp"
+#include "request_handlers/base64.hpp"
+
 #include <windows.h>
-
-
 
 int main()
 {
-    db::exec("SELECT * FROM users;");
+    std::cout << Base64::encode("text") << std::endl;
+    std::cout << Base64::encode("textA") << std::endl;
+    std::cout << Base64::encode("devellloper") << std::endl;
     enum ServerStates
     {
         CHOOSE_STATE = 0,
