@@ -21,24 +21,20 @@ namespace Base64
 
 	std::string encode(std::string text)
 	{
+		int remainder = text.size() % 3;
+
 		std::string text_binary = "";
 		for (unsigned int i = 0; i < text.size(); i ++)
 			text_binary += std::bitset<8>(char(text[i])).to_string();
+		text_binary.resize(text_binary.size() + ((3 - remainder)%3)*2, '0');
 
 		std::string text_encoded = "";
-		unsigned int i;
-		for (i = 0; i < (text_binary.size()/6); i++)
+		for (unsigned int i = 0; i < (text_binary.size()/6); i++)
 			text_encoded += chars[std::bitset<6>(text_binary.substr(i*6, 6)).to_ulong()];
 
-		int remainder = text.size() % 3;
 		if (remainder == 0)
 			return text_encoded;
 
-		std::cout << "encode" <<std::endl;
-		std::cout << text_binary <<std::endl;
-		text_binary.resize((i + 1)*6, '0');
-		std::cout << text_binary <<std::endl;
-		text_encoded += chars[std::bitset<6>(text_binary.substr(i*6, 6)).to_ulong()];
 		if (remainder == 1)
 			text_encoded += "==";
 		if (remainder == 2)
@@ -57,15 +53,11 @@ namespace Base64
 		std::string text_binary = "";
 		for (unsigned int i = 0; i < (text_encoded.size() - equels_count); i ++)
 			text_binary += std::bitset<6>(getCharIndex(text_encoded[i])).to_string();
-
-		std::cout << "decode" <<std::endl;
-		std::cout << text_binary <<std::endl;
 		text_binary.resize(text_binary.size() - equels_count*2);
-		std::cout << text_binary <<std::endl;
 
 		std::string text_decoded = "";
-		unsigned int i;
-		for (i = 0; i < (text_binary.size()/8); i++)
+		
+		for (unsigned int i = 0; i < (text_binary.size()/8); i++)
 			text_decoded += char(std::bitset<8>(text_binary.substr(i*8, 8)).to_ulong());
 
 		return text_decoded;

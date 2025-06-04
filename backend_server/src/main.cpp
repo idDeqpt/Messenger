@@ -7,20 +7,12 @@
 #include "Network/Timer.hpp"
 
 #include "handlers.hpp"
-#include "request_handlers/base64.hpp"
+#include "request_handlers/sha256.hpp"
 
 #include <windows.h>
 
 int main()
 {
-    std::cout << Base64::encode("DEV") << std::endl;
-    std::cout << Base64::decode(Base64::encode("DEV")) << std::endl;
-    std::cout << Base64::encode("text") << std::endl;
-    std::cout << Base64::decode(Base64::encode("text")) << std::endl;
-    std::cout << Base64::encode("textA") << std::endl;
-    std::cout << Base64::decode(Base64::encode("textA")) << std::endl;
-    std::cout << Base64::encode("devellloper") << std::endl;
-    std::cout << Base64::decode(Base64::encode("devellloper")) << std::endl;
     enum ServerStates
     {
         CHOOSE_STATE = 0,
