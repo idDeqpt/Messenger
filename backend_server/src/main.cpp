@@ -7,7 +7,7 @@
 #include "Network/Timer.hpp"
 
 #include "handlers.hpp"
-#include "request_handlers/sha256.hpp"
+#include "request_handlers/jwt.hpp"
 
 #include <windows.h>
 
