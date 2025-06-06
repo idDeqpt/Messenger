@@ -1,0 +1,31 @@
+.main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 4px solid;
+}
+
+.main table {
+	background-color: yellow;
+	border: 3px solid;
+	width: 70%;
+}
+
+.main table tr td {
+	background-color: green;
+	border: 2px solid;
+	display: flex;
+	flex-direction: row;
+}
+
+.main table tr td img {
+	background-color: red;
+	border: 2px solid;
+	width: 20%;
+}
+
+.main table tr td div {
+	background-color: white;
+	border: 2px solid;
+	width: 100%;
+}

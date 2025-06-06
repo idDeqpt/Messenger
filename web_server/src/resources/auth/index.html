@@ -2,12 +2,15 @@
 <html>
 	<head>
 		<title>Messenger</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="auth/style.css">
 		<script type="text/javascript" src="js/authorization.js"></script>
 	</head>
 	<body>
 		<div class="main">
 			<table>
+				<tr>
+					<td colspan="2"><center><a>Регистрация/Вход</a></center></td>
+				</tr>
 				<tr>
 					<td><a>Логин</a></td>
 					<td><input type="text" id="login"></td>
@@ -16,7 +19,11 @@
 					<td><input type="text" id="password"></td>
 				</tr>
 				<tr>
-					<td colspan="2"><button onclick="auth();"><a>Войти</a></button></td>
+					<td><button onclick="signup();"><a>Зарегистрироваться</a></button></td>
+					<td><button onclick="login();"><a>Войти</a></button></td>
+				</tr>
+				<tr>
+					<td colspan="2" id="warning-field"></td>
 				</tr>
 			</table>
 		</div>

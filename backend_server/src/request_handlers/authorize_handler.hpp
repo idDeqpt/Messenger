@@ -5,16 +5,27 @@
 #include <memory>
 #include <string>
 
-#include "database.hpp"
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTPRequests.hpp>
 #include <Network/URL.hpp>
 
+#include "database.hpp"
+#include "jwt.hpp"
 
 namespace handlers
 {
     net::HTTPResponse authorize(net::HTTPRequest request)
     {
+        if (request.start_line[0] == "GET")
+        {
+            std::string token = request.headers["Authorization"];
+            if ()
+        }
+
+        if (request.start_line[0] == "POST")
+        {
+            if db::exec("SELECT id FROM users WHERE login_hash = \"" + uri.getParamsPtr()["login"] + "\";");
+        }
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
 
