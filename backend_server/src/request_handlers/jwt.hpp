@@ -21,6 +21,23 @@ namespace jwt
 		TOKEN_EXPIRED,
 	};
 
+	std::shared_ptr<jst::JSObject> getPayload(std::string token)
+	{
+		int left_point = token.find(".");
+		if (left_point == std::string::npos)
+			return std::shared_ptr<jst::JSObject>(nullptr);
+		std::string header = token.substr(0, left_point);
+
+		int right_point = token.find(".", left_point + 1);
+		if (right_point == std::string::npos)
+			return std::shared_ptr<jst::JSObject>(nullptr);
+		std::string payload = token.substr(left_point + 1, right_point - left_point - 1);
+
+		jst::JSON json;
+		json.parse(Base64::decode(payload));
+		return std::static_pointer_cast<jst::JSObject>(json.getParseResult());
+	}
+
 	std::string createSignature(std::string& header, std::string& payload, std::string& key)
 	{
 		return SHA256::hash(header + "." + payload + "." + key);
