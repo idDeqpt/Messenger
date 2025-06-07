@@ -16,7 +16,7 @@ namespace handlers
         if (request.start_line[0] == "GET")
         {
         	std::string token = request.headers["Authorization"];
-        	if (!jwt::verifyToken(token))
+        	if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
         	{
 	            response.start_line[1] = "401";
 	            response.start_line[2] = "UNAUTHORIZED";
@@ -26,6 +26,12 @@ namespace handlers
                 response.start_line[1] = "200";
                 response.start_line[2] = "OK";
         	}
+        }
+        else if (request.start_line[0] == "OPTION")
+        {
+            response.start_line[1] = "200";
+            response.start_line[2] = "OK";
+            response.headers["Allow"] = "OPTIONS, GET";
         }
         else
         {
