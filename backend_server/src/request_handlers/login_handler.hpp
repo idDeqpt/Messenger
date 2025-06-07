@@ -1,5 +1,5 @@
-#ifndef UPDATE_TOKEN_HANDLER_HPP
-#define UPDATE_TOKEN_HANDLER_HPP
+#ifndef LOGIN_HANDLER_HPP
+#define LOGIN_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -57,4 +57,4 @@ namespace handlers
     }
 }
 
-#endif //UPDATE_TOKEN_HANDLER_HPP
+#endif //LOGIN_HANDLER_HPP

@@ -1,5 +1,5 @@
-#ifndef CREATE_TOKEN_HANDLER_HPP
-#define CREATE_TOKEN_HANDLER_HPP
+#ifndef SIGNUP_HANDLER_HPP
+#define SIGNUP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -61,4 +61,4 @@ namespace handlers
     }
 }
 
-#endif //CREATE_TOKEN_HANDLER_HPP
+#endif //SIGNUP_HANDLER_HPP

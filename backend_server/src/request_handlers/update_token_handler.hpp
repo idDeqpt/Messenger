@@ -1,18 +1,20 @@
 #ifndef UPDATE_TOKEN_HANDLER_HPP
 #define UPDATE_TOKEN_HANDLER_HPP
 
+#include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
 #include <utility>
 #include <string>
 
 #include "generateJWT.hpp"
+#include "jwt.hpp"
+
 
 namespace handlers
 {
-	net::HTTPResponse update_token(net::HTTPRequest request)
+    net::HTTPResponse update_token(net::HTTPRequest request)
     {
         net::HTTPResponse response;
-        net::URI uri(request.start_line[1]);
         bool unauthorized = false;
 
         if (request.start_line[0] == "POST")
@@ -22,10 +24,10 @@ namespace handlers
         		unauthorized = true;
         	else
         	{
-        		std::shared_ptr<jst::JSObject> payload_ptr = getPayload(token);
-        		std::string id = payload_ptr->operator[]("id")->getString();
+        		std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
+        		std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
         		std::shared_ptr<jst::JSArray> result = db::exec("SELECT refresh_token FROM users WHERE id = \"" + id + "\";");
-        		if (token != result->back()->getString())
+        		if (token != std::static_pointer_cast<jst::JSString>(result->back())->getString())
         			unauthorized = true;
         		else
         		{
