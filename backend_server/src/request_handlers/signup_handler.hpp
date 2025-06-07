@@ -3,10 +3,11 @@
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
+#include <utility>
 #include <string>
 #include <memory>
-#include <ctime>
 
+#include "generateJWT.hpp"
 #include "database.hpp"
 #include "jwt.hpp"
 
@@ -30,24 +31,18 @@ namespace handlers
             }
             else
             {
-                response.start_line[1] = "200";
-                response.start_line[2] = "OK";
-
-                jst::JSObject payload;
-                payload.addField("exp", std::make_shared<jst::JSNumber>(time(NULL) + 60));
-                std::string access_token = jwt::createToken(payload);
-
-                payload.removeField("exp");
-                payload.addField("exp", std::make_shared<jst::JSNumber>(time(NULL) + 3*60));
-                std::string refresh_token = jwt::createToken(payload);
+                std::string id = "id" + login;
+                std::pair<std::string, std::string> tokens = generateJWT(id, 60, 60*3);
 
                 jst::JSObject json;
-                json.addField("access_token", std::make_shared<jst::JSString>(access_token));
-                json.addField("refresh_token", std::make_shared<jst::JSString>(refresh_token));
+                json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));
+                json.addField("refresh_token", std::make_shared<jst::JSString>(tokens.second));
 
                 db::exec("INSERT INTO users (id, login_hash, password_hash, refresh_token)\
-                          VALUES (\"" + login + "\", \"" + login + "\", \"" + password + "\", \"" + refresh_token + "\");");
+                          VALUES (\"" + login + "\", \"" + login + "\", \"" + password + "\", \"" + tokens.second + "\");");
 
+                response.start_line[1] = "200";
+                response.start_line[2] = "OK";
                 response.body = json.toString();
             }
         }

@@ -13,11 +13,11 @@ function signup()
 
 		if (response.ok)
 		{
-			window.location.assign("/chats");
 			response.json().then(data => {
 				localStorage.setItem("access_token", data.access_token);
 				localStorage.setItem("refresh_token", data.refresh_token);
 			});
+			window.location.assign("/chats");
 		}
 		else
 			document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Пользователь с таким логином уже существует</a>";
@@ -41,11 +41,11 @@ function login()
 
 		if (response.ok)
 		{
-			window.location.assign("/chats");
 			response.json().then(data => {
 				localStorage.setItem("access_token", data.access_token);
 				localStorage.setItem("refresh_token", data.refresh_token);
 			});
+			window.location.assign("/chats");
 		}
 		else
 			document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Неправильный логин или пароль</a>";
