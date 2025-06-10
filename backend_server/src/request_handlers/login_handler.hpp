@@ -34,8 +34,7 @@ namespace handlers
                 json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));
                 json.addField("refresh_token", std::make_shared<jst::JSString>(tokens.second));
 
-                db::exec("INSERT INTO users (refresh_token)\
-                          VALUES (\"" + tokens.second + "\");");
+                db::exec("UPDATE users SET refresh_token = \"" + tokens.second + "\" WHERE login_hash = \"" + login + "\";");
 
                 response.start_line[1] = "200";
                 response.start_line[2] = "OK";
