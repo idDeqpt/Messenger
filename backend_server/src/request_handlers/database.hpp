@@ -3,35 +3,38 @@
 
 #include <JSTypes/JSTypes.hpp>
 #include <SQLite3/sqlite3.h>
+#include <unordered_map>
 #include <memory>
 #include <string>
+#include <vector>
 
 
 namespace db
 {
+	typedef std::vector<std::unordered_map<std::string, std::string>> DataBuffer;
+
 	static int callback(void* data, int argc, char** argv, char** azColName) 
 	{
-		jst::JSArray* result = static_cast<jst::JSArray*>(data);
-		jst::JSObject obj;
+		DataBuffer* result = static_cast<DataBuffer*>(data);
+		result->emplace_back();
 		for (int i = 0; i < argc; i++)
 			if (argv[i])
-				obj.addField(azColName[i], std::make_shared<jst::JSString>(argv[i]));
+				result->back().emplace(azColName[i], argv[i]);
 			else
-				obj.addField(azColName[i]);
-		result->pushBack(std::make_shared<jst::JSObject>(obj));
+				result->back().emplace(azColName[i], "");
 		return 0; 
 	}
 
-	std::shared_ptr<jst::JSArray> exec(std::string request)
+	std::shared_ptr<DataBuffer> exec(std::string request)
 	{
 	    sqlite3 *db;
 	    char *errMessage = 0;
 	    int exit = sqlite3_open("resources/database.db", &db);
-	    jst::JSArray result;
+	    DataBuffer result;
 
 	    sqlite3_exec(db, request.c_str(), db::callback, (void*)&result, &errMessage);
 
-	    return std::make_shared<jst::JSArray>(result);
+	    return std::make_shared<DataBuffer>(result);
 	}
 }
 

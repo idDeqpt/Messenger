@@ -19,7 +19,7 @@ namespace handlers
         {
             std::string login = uri.getParamsPtr()["login"];
             std::string password = uri.getParamsPtr()["password"];
-            std::shared_ptr<jst::JSArray> result = db::exec("SELECT id FROM users WHERE login_hash = \"" + login + "\" AND password_hash = \"" + password + "\";");
+            std::shared_ptr<db::DataBuffer> result = db::exec("SELECT id FROM users WHERE login_hash = \"" + login + "\" AND password_hash = \"" + password + "\";");
             if (result->size() != 1)
             {
                 response.start_line[1] = "401";
@@ -27,14 +27,14 @@ namespace handlers
             }
             else
             {
-                std::string id = std::static_pointer_cast<jst::JSString>(std::static_pointer_cast<jst::JSObject>(result->back())->operator[]("id"))->getString();
+                std::string id = result->back()["id"];
                 std::pair<std::string, std::string> tokens = generateJWT(id, 60, 60*3);
 
                 jst::JSObject json;
                 json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));
                 json.addField("refresh_token", std::make_shared<jst::JSString>(tokens.second));
 
-                db::exec("UPDATE users SET refresh_token = \"" + tokens.second + "\" WHERE login_hash = \"" + login + "\";");
+                db::exec("UPDATE users SET refresh_token = \"" + tokens.second + "\" WHERE id = " + id + ";");
 
                 response.start_line[1] = "200";
                 response.start_line[2] = "OK";

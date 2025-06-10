@@ -7,6 +7,7 @@
 #include <string>
 
 #include "generateJWT.hpp"
+#include "database.hpp"
 #include "jwt.hpp"
 
 
@@ -26,13 +27,13 @@ namespace handlers
         	{
         		std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
         		std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
-        		std::shared_ptr<jst::JSArray> result = db::exec("SELECT refresh_token FROM users WHERE id = \"" + id + "\";");
+        		std::shared_ptr<db::DataBuffer> result = db::exec("SELECT refresh_token FROM users WHERE id = \"" + id + "\";");
                 if (result->size() == 0)
                     unauthorized = true;
                 else
                 {
                     std::cout << "POINT1--------------------------------\n";
-            		std::string db_token = std::static_pointer_cast<jst::JSString>(std::static_pointer_cast<jst::JSObject>(result->back())->operator[]("refresh_token"))->getString();
+            		std::string db_token = result->back()["refresh_token"];
                     std::cout << "POINT2--------------------------------\n";
                     if (token != db_token)
             			unauthorized = true;
