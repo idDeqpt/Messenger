@@ -27,19 +27,22 @@ std::string get_content_type(std::string path)
         return "text/css";
     if (path.find(".js") != std::string::npos)
         return "application/javascript";
+    if (path.find(".png") != std::string::npos)
+        return "image/png";
     return "text/plane";
 }
 
 
 std::unique_ptr<std::string> load_file_data_ptr(std::string path)
 {
-    std::ifstream file(path);
+    std::ifstream file(path, std::ios::binary);
 
     if (!file)
         return std::unique_ptr<std::string>(nullptr);
 
     std::ostringstream oss;
     oss << file.rdbuf();
+    file.close();
     return std::make_unique<std::string>(oss.str());
 }
 
