@@ -2,6 +2,12 @@ function signup()
 {
 	let login_value = document.getElementById("login").value;
 	let password_value = document.getElementById("password").value;
+	if ((login_value == "") || (password_value == ""))
+	{
+		document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Необходимо заполнить все поля</a>";
+		return;
+	}
+
 	const params = new URLSearchParams({
 		login: login_value,
 		password: password_value
@@ -28,8 +34,11 @@ function login()
 {
 	let login_value = document.getElementById("login").value;
 	let password_value = document.getElementById("password").value;
-	console.log("login: ", login_value);
-	console.log("password: ", password_value);
+	if ((login_value == "") || (password_value == ""))
+	{
+		document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Необходимо заполнить все поля</a>";
+		return;
+	}
 
 	const params = new URLSearchParams({
 		login: login_value,

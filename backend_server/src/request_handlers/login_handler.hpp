@@ -5,7 +5,8 @@
 #include <Network/HTTP.hpp>
 #include <utility>
 
-#include "generateJWT.hpp"
+#include "tools/generateJWT.hpp"
+#include "tools/database.hpp"
 
 
 namespace handlers

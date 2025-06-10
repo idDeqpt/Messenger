@@ -8,9 +8,8 @@
 #include <string>
 #include <memory>
 
-#include "generateJWT.hpp"
-#include "database.hpp"
-#include "jwt.hpp"
+#include "tools/generateJWT.hpp"
+#include "tools/database.hpp"
 
 
 namespace handlers

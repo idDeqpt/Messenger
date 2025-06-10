@@ -6,9 +6,9 @@
 #include <utility>
 #include <string>
 
-#include "generateJWT.hpp"
-#include "database.hpp"
-#include "jwt.hpp"
+#include "tools/generateJWT.hpp"
+#include "tools/database.hpp"
+#include "tools/jwt.hpp"
 
 
 namespace handlers
@@ -32,9 +32,7 @@ namespace handlers
                     unauthorized = true;
                 else
                 {
-                    std::cout << "POINT1--------------------------------\n";
             		std::string db_token = result->back()["refresh_token"];
-                    std::cout << "POINT2--------------------------------\n";
                     if (token != db_token)
             			unauthorized = true;
             		else
