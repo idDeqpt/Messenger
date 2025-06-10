@@ -91,8 +91,6 @@ int main()
                     << "============================\n"
                     << "Press Space for stop...\n\n";
                 }
-
-                //std::cout << "a\n";
                 if (GetAsyncKeyState(VK_SPACE) < 0)
                     state = ServerStates::PAUSE;
                 timer.sleep(16);

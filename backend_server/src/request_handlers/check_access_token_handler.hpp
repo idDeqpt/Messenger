@@ -27,11 +27,12 @@ namespace handlers
                 response.start_line[2] = "OK";
         	}
         }
-        else if (request.start_line[0] == "OPTION")
+        else if (request.start_line[0] == "OPTIONS")
         {
             response.start_line[1] = "200";
             response.start_line[2] = "OK";
-            response.headers["Allow"] = "OPTIONS, GET";
+            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,GET";
+            response.headers["Access-Control-Allow-Headers"] = "Authorization";
         }
         else
         {

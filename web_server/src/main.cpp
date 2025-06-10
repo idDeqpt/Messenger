@@ -50,7 +50,6 @@ std::string http_handler(net::HTTPServer& server, std::string request)
     net::HTTPRequest req(request);
     net::URI uri(req.start_line[1]);
     std::string path = uri.toString(false);
-    std::cout << path << std::endl;
 
     if (path.find(".") == std::string::npos)
         path += "/index.html";
@@ -152,8 +151,6 @@ int main()
                     << "============================\n"
                     << "Press Space for stop...\n\n";
                 }
-
-                //std::cout << "a\n";
                 if (GetAsyncKeyState(VK_SPACE) < 0)
                     state = ServerStates::PAUSE;
                 timer.sleep(16);

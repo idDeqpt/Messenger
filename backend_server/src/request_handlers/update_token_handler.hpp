@@ -27,22 +27,37 @@ namespace handlers
         		std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
         		std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
         		std::shared_ptr<jst::JSArray> result = db::exec("SELECT refresh_token FROM users WHERE id = \"" + id + "\";");
-        		if (token != std::static_pointer_cast<jst::JSString>(result->back())->getString())
-        			unauthorized = true;
-        		else
-        		{
-        			std::pair<std::string, std::string> tokens = generateJWT(id, 60, 60*3);
-        			db::exec("INSERT INTO users (refresh_token)\
-                          	  VALUES (\"" + tokens.second + "\");");
-        			jst::JSObject json;
-	                json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));
-	                json.addField("refresh_token", std::make_shared<jst::JSString>(tokens.second));
+                if (result->size() == 0)
+                    unauthorized = true;
+                else
+                {
+                    std::cout << "POINT1--------------------------------\n";
+            		std::string db_token = std::static_pointer_cast<jst::JSString>(std::static_pointer_cast<jst::JSObject>(result->back())->operator[]("refresh_token"))->getString();
+                    std::cout << "POINT2--------------------------------\n";
+                    if (token != db_token)
+            			unauthorized = true;
+            		else
+            		{
+            			std::pair<std::string, std::string> tokens = generateJWT(id, 60, 60*3);
+            			db::exec("INSERT INTO users (refresh_token)\
+                              	  VALUES (\"" + tokens.second + "\");");
+            			jst::JSObject json;
+    	                json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));
+    	                json.addField("refresh_token", std::make_shared<jst::JSString>(tokens.second));
 
-	                response.start_line[1] = "200";
-	                response.start_line[2] = "OK";
-	                response.body = json.toString();
-        		}
+    	                response.start_line[1] = "200";
+    	                response.start_line[2] = "OK";
+    	                response.body = json.toString();
+            		}
+                }
         	}
+        }
+        else if (request.start_line[0] == "OPTIONS")
+        {
+            response.start_line[1] = "200";
+            response.start_line[2] = "OK";
+            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,POST";
+            response.headers["Access-Control-Allow-Headers"] = "Authorization";
         }
         else
         {

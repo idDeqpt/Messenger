@@ -85,7 +85,6 @@ namespace jwt
 		{
 			jwt_time = stoi(payload_ptr->operator[]("exp")->toString());
 		} catch(...) {}
-		std::cout << jwt_time << " " << cur_time << std::endl;
 		if ((payload_ptr->operator[]("exp") == nullptr) || (jwt_time > cur_time))
 			return TokenError::NO_ERROR;
 

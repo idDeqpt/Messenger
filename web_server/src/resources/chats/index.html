@@ -2,8 +2,10 @@
 <html>
 	<head>
 		<title>Chats</title>
+		<script type="text/javascript" src="js/update_token.js"></script>
+		<script type="text/javascript" src="js/check_token.js"></script>
+
 		<link rel="stylesheet" href="chats/style.css">
-		<script type="text/javascript" src="js/authorization.js"></script>
 	</head>
 	<body>
 		<div class="main">
@@ -20,6 +22,7 @@
 					<td><a>Chat 2</a></td>
 				</tr>
 			</table>
+			<button onclick="check_token(func => {console.log('press');});"></button>
 		</div>
 	</body>
 </html>
