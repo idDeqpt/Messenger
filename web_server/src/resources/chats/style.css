@@ -15,8 +15,14 @@ body {
 	height: 50px;
 }
 
-.header div {
-	width: 100%;
+.header-label {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.header-buttons {
+	
 }
 
 

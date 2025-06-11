@@ -22,7 +22,6 @@ namespace handlers
 
     	if (request.start_line[0] == "GET")
         {
-
             std::string token = request.headers["Authorization"];
             if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
             {
