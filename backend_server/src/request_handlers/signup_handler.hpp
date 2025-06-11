@@ -31,11 +31,12 @@ namespace handlers
             }
             else
             {
-                db::exec("INSERT INTO users (login_hash, password_hash)\
-                          VALUES (\"" + login + "\", \"" + password + "\");");
-                std::shared_ptr<db::DataBuffer> result2 = db::exec("SELECT id FROM users WHERE login_hash = \"" + login + "\";");
-                std::string id = result2->back()["id"];
+                std::shared_ptr<db::DataBuffer> result2 = db::exec("SELECT MAX(id) FROM users");
+                std::cout << "SIZE: " << result2->size() << std::endl;
+                std::string id = "id" + result2->back()["MAX(id)"];
                 std::cout << "ID: " << id << std::endl;
+                db::exec("INSERT INTO users (username, login_hash, password_hash)\
+                          VALUES (\"" + id + "\", \"" + login + "\", \"" + password + "\");");
                 std::pair<std::string, std::string> tokens = generateJWT(id, 60, 60*3);
 
                 jst::JSObject json;

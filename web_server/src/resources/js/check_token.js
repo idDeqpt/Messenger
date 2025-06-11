@@ -6,7 +6,7 @@ async function check_token(url, options, func)
 		options.headers["Authorization"] = localStorage.getItem("access_token");
 
 	await fetch(url, options).then(response => {
-		if (!response.ok)
+		if (response.status == 401)
 		{
 			console.log("Unauth c");
 			update_token(url, options, func);
@@ -14,12 +14,7 @@ async function check_token(url, options, func)
 		else
 		{
 			console.log("Auth c");
-
 			func(response);
 		}
 	});
 }
-check_token("http://127.0.0.1:8008/check_access_token", {
-	method: "GET"
-	//headers: {"Authorization": localStorage.getItem("access_token")}
-}, func => {console.log("success");});

@@ -1,0 +1,1 @@
+check_token("http://127.0.0.1:8008/check_access_token", {method: "GET"}, func => {console.log("success");});

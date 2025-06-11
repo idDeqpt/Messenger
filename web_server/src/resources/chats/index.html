@@ -2,12 +2,19 @@
 <html>
 	<head>
 		<title>Chats</title>
+		<link rel="icon" href="favicon.png" type="image/x-icon">
 		<script type="text/javascript" src="js/update_token.js"></script>
 		<script type="text/javascript" src="js/check_token.js"></script>
+		<script type="text/javascript" src="chats/on_load.js"></script>
 
 		<link rel="stylesheet" href="chats/style.css">
 	</head>
 	<body>
+		<div class="header">
+			<img src="favicon.png" alt="icon">
+			<div>Чаты</div>
+			<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
+		</div>
 		<div class="main">
 			<table id="chats-table">
 				<tr>
@@ -22,7 +29,6 @@
 					<td><a>Chat 2</a></td>
 				</tr>
 			</table>
-			<button onclick="check_token(func => {console.log('press');});"></button>
 		</div>
 	</body>
 </html>

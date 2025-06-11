@@ -37,7 +37,7 @@ namespace handlers
             			unauthorized = true;
             		else
             		{
-            			std::pair<std::string, std::string> tokens = generateJWT(id, 60, 60*3);
+            			std::pair<std::string, std::string> tokens = generateJWT(id, 60*60, 60*60*24*3);
             			db::exec("INSERT INTO users (refresh_token)\
                               	  VALUES (\"" + tokens.second + "\");");
             			jst::JSObject json;

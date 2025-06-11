@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Profile</title>
+		<link rel="icon" href="favicon.png" type="image/x-icon">
+		<script type="text/javascript" src="js/update_token.js"></script>
+		<script type="text/javascript" src="js/check_token.js"></script>
+		<script type="text/javascript" src="profile/on_load.js"></script>
+
+		<link rel="stylesheet" href="profile/style.css">
+		<script type="text/javascript" src="js/change_username.js"></script>
+	</head>
+	<body>
+		<div class="header">
+			<img src="favicon.png" alt="icon">
+			<div>Профиль</div>
+			<button onclick="window.location.assign('/chats')"><a>Чаты</a></button>
+		</div>
+		<div class="main">
+			<table>
+				<tr>
+					<td><a>Имя</a></td>
+					<td><a id="current-username"></a></td>
+					<td><input type="text" id="username"></td>
+					<td><button onclick="change_username();"><a>Изменить</a></button></td>
+				</tr>
+				<tr><td colspan="2" id="warning-field"></td></tr>
+			</table>
+		</div>
+	</body>
+</html>

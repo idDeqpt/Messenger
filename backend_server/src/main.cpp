@@ -91,8 +91,8 @@ int main()
                     << "============================\n"
                     << "Press Space for stop...\n\n";
                 }
-                if (GetAsyncKeyState(VK_SPACE) < 0)
-                    state = ServerStates::PAUSE;
+                //if (GetAsyncKeyState(VK_SPACE) < 0)
+                    //state = ServerStates::PAUSE;
                 timer.sleep(16);
             } break;
 

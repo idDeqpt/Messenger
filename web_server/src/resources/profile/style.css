@@ -1,0 +1,32 @@
+body {
+    display: block;
+    margin: 0px;
+}
+
+.header {
+	min-height: 50px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border: 4px solid;
+}
+
+.header img {
+	height: 50px;
+}
+
+.header div {
+	width: 100%;
+}
+
+
+.main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 4px solid;
+}
+
+.warning {
+	color: red;
+}
