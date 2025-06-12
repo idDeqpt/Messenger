@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="icon" href="favicon.png" type="image/x-icon">
+		<script type="text/javascript" src="js/update_token.js"></script>
+		<script type="text/javascript" src="js/check_token.js"></script>
+
+		<link rel="stylesheet" href="chat/style.css">
+		<script type="text/javascript" src="js/exit.js"></script>
+	</head>
+	<body>
+		<div class="header">
+			<img src="favicon.png" alt="icon">
+			<div class="header-label"><a>Чат</a></div>
+			<div class="header-buttons">
+				<button onclick="window.location.assign('/chats')"><a>Чаты</a></button>
+				<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
+				<button onclick="exit();"><a>Выйти</a></button>
+			</div>
+		</div>
+
+		<div class="main">
+			<div class="main-header">
+				<button onclick="window.location.assign('/chats')">Назад</button>
+				<div><a id="main-header-chatname"></a></div>
+			</div>
+
+			<div id="messages-table" class="main-messages"></div>
+
+			<div class="main_footer"></div>
+		</div>
+
+		<script type="text/javascript" src="chat/on_load.js"></script>
+	</body>
+</html>

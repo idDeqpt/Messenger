@@ -8,7 +8,7 @@ check_token("http://127.0.0.1:8008/get_user_chats", {method: "GET"}, function(re
 				<tr>\
 					<td>\
 						<img>\
-						<div>\
+						<div onclick=\"window.location.assign('/chat?id=" + data.chats[i].id + "');\">\
 							<a>" + data.chats[i].name + "</a>\
 						</div>\
 					</td>\

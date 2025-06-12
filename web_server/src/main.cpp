@@ -53,6 +53,8 @@ std::string http_handler(net::HTTPServer& server, std::string request)
     net::HTTPRequest req(request);
     net::URI uri(req.start_line[1]);
     std::string path = uri.toString(false);
+    std::cout << "PATH: " << path << std::endl;
+    std::cout << "PATH1: " << uri.toString(true) << std::endl;
 
     if (path.find(".") == std::string::npos)
         path += "/index.html";
