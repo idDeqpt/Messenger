@@ -14,7 +14,6 @@
 			<img src="favicon.png" alt="icon">
 			<div class="header-label"><a>Чат</a></div>
 			<div class="header-buttons">
-				<button onclick="window.location.assign('/chats')"><a>Чаты</a></button>
 				<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
 				<button onclick="exit();"><a>Выйти</a></button>
 			</div>
@@ -28,7 +27,10 @@
 
 			<div id="messages-table" class="main-messages"></div>
 
-			<div class="main_footer"></div>
+			<div class="main_footer">
+				<input type="text" id="message-text" value="Введите текст...">
+				<button type="text" onclick="send_message();"><a>Отправить</a></button>
+			</div>
 		</div>
 
 		<script type="text/javascript" src="chat/on_load.js"></script>

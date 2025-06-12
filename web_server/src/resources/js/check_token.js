@@ -5,16 +5,15 @@ async function check_token(url, options, func)
 	else
 		options.headers["Authorization"] = localStorage.getItem("access_token");
 
-	await fetch(url, options).then(response => {
-		if (response.status == 401)
-		{
-			console.log("Unauth c");
-			update_token(url, options, func);
-		}
-		else
-		{
-			console.log("Auth c");
-			func(response);
-		}
-	});
+	const response = await fetch(url, options);
+	if (response.status == 401)
+	{
+		console.log("Unauth c");
+		await update_token(url, options, func);
+	}
+	else
+	{
+		console.log("Auth c");
+		await func(response);
+	}
 }
