@@ -16,6 +16,7 @@
 #include "request_handlers/get_user_chats_handler.hpp"
 #include "request_handlers/get_chat_data_handler.hpp"
 #include "request_handlers/get_chat_messages_handler.hpp"
+#include "request_handlers/send_message_handler.hpp"
 
 
 void addHandlers(net::HTTPServer& server)
@@ -29,7 +30,8 @@ void addHandlers(net::HTTPServer& server)
 		std::make_pair("/change_username", handlers::change_username),
 		std::make_pair("/get_user_chats", handlers::get_user_chats),
 		std::make_pair("/get_chat_data", handlers::get_chat_data),
-		std::make_pair("/get_chat_messages", handlers::get_chat_messages)
+		std::make_pair("/get_chat_messages", handlers::get_chat_messages),
+		std::make_pair("/send_message", handlers::send_message)
 	};
 
 	for (unsigned int i = 0; i < handlers.size(); i++)

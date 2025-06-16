@@ -18,7 +18,6 @@ namespace handlers
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
-        bool unauthorized = false;
 
     	if (request.start_line[0] == "GET")
         {
