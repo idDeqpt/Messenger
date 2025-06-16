@@ -23,7 +23,12 @@ async function messages_handler(users)
 
 check_token("http://127.0.0.1:8008/get_chat_data" + document.location.search, {method: "GET"}, async function(response){
 	const data = await response.json();
-	document.getElementById("main-header-chatname").innerHTML += data.chat_name;
-	await messages_handler(data.chat_members);
+
+	await messages_handler(data.members);
 	setInterval(async ()=>{await messages_handler(data.chat_members);}, 2000);
+
+	document.getElementById("main-header-chatname").innerHTML += data.name;
+	document.getElementById("main-header").innerHTML += (data.type == "group") ? "\
+	<div><button onclick=\"window.location.assign('/add_member_form');\"><a>Добавить участника</a></button></div>\
+	" : "";
 });

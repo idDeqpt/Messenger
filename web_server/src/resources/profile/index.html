@@ -5,7 +5,6 @@
 		<link rel="icon" href="favicon.png" type="image/x-icon">
 		<script type="text/javascript" src="js/update_token.js"></script>
 		<script type="text/javascript" src="js/check_token.js"></script>
-		<script type="text/javascript" src="profile/on_load.js"></script>
 
 		<link rel="stylesheet" href="profile/style.css">
 		<script type="text/javascript" src="js/change_username.js"></script>
@@ -13,9 +12,13 @@
 	<body>
 		<div class="header">
 			<img src="favicon.png" alt="icon">
-			<div>Профиль</div>
-			<button onclick="window.location.assign('/chats')"><a>Чаты</a></button>
+			<div class="header-label"><a>Профиль</a></div>
+			<div class="header-buttons">
+				<button onclick="window.location.assign('/chats')"><a>Чаты</a></button>
+				<button onclick="exit();"><a>Выйти</a></button>
+			</div>
 		</div>
+
 		<div class="main">
 			<table>
 				<tr>
@@ -24,8 +27,10 @@
 					<td><input type="text" id="username"></td>
 					<td><button onclick="change_username();"><a>Изменить</a></button></td>
 				</tr>
-				<tr><td colspan="2" id="warning-field"></td></tr>
+				<tr><td colspan="4" id="warning-field"></td></tr>
 			</table>
 		</div>
+		
+		<script type="text/javascript" src="profile/on_load.js"></script>
 	</body>
 </html>
