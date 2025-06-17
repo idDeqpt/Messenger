@@ -43,22 +43,23 @@ namespace handlers
                     chat_data->back()["name"] = name_data->back()["username"];
                 }
                 
-                jst::JSObject json;
-                json.addField("chat_name", std::make_shared<jst::JSString>(chat_data->back()["name"]));
-                json.addField("chat_members", std::make_shared<jst::JSArray>());
+                jst::JSObject json_chat;
+                json_chat.addField("type", std::make_shared<jst::JSString>(chat_data->back()["type"]));
+                json_chat.addField("name", std::make_shared<jst::JSString>(chat_data->back()["name"]));
+                json_chat.addField("members", std::make_shared<jst::JSArray>());
 
                 for (unsigned int i = 0; i < chat_members_data->size(); i++)
                 {
                     jst::JSObject member;
                     member.addField("id", std::make_shared<jst::JSNumber>(stoi(chat_members_data->at(i)["user_id"])));
                     member.addField("username", std::make_shared<jst::JSString>(chat_members_data->at(i)["username"]));
-                    std::static_pointer_cast<jst::JSArray>(json["chat_members"])->pushBack(std::make_shared<jst::JSObject>(member));
+                    std::static_pointer_cast<jst::JSArray>(json_chat["members"])->pushBack(std::make_shared<jst::JSObject>(member));
                 }
 
                 response.start_line[1] = "200";
                 response.start_line[2] = "OK";
                 response.headers["Content-Type"] = "application/json";
-                response.body = json.toString();
+                response.body = json_chat.toString();
             }
         }
         else if (request.start_line[0] == "OPTIONS")

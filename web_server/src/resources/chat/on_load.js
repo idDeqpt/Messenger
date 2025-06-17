@@ -29,6 +29,6 @@ check_token("http://127.0.0.1:8008/get_chat_data" + document.location.search, {m
 
 	document.getElementById("main-header-chatname").innerHTML += data.name;
 	document.getElementById("main-header").innerHTML += (data.type == "group") ? "\
-	<div><button onclick=\"window.location.assign('/add_member_form');\"><a>Добавить участника</a></button></div>\
+	<div><button onclick=\"window.location.assign('/chat/params" + document.location.search + "');\"><a>Парамтеры</a></button></div>\
 	" : "";
 });

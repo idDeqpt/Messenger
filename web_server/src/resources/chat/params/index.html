@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="icon" href="favicon.png" type="image/x-icon">
+		<script type="text/javascript" src="/js/update_token.js"></script>
+		<script type="text/javascript" src="/js/check_token.js"></script>
+
+		<link rel="stylesheet" href="params/style.css">
+		<script type="text/javascript" src="/js/exit.js"></script>
+		<script type="text/javascript" src="/js/add_member_to_chat.js"></script>
+	</head>
+	<body>
+		<div class="header">
+			<img src="/favicon.png" alt="icon">
+			<div class="header-label"><a>Добавление участника</a></div>
+			<div id="header-buttons" class="header-buttons">
+				<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
+				<button onclick="exit();"><a>Выйти</a></button>
+			</div>
+		</div>
+
+		<div class="main">
+			<table>
+				<tr>
+					<td><a>Имя</a></td>
+					<td><input type="text" id="username"></td>
+					<td><button onclick="add_member();"><a>Добавить</a></button></td>
+				</tr>
+				<tr><td colspan="3" id="warning-field"></td></tr>
+			</table>
+		</div>
+
+		<script type="text/javascript" src="params/on_load.js"></script>
+	</body>
+</html>
