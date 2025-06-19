@@ -39,8 +39,6 @@ namespace handlers
 
                 std::shared_ptr<db::DataBuffer> result_forbidden = db::exec("SELECT * FROM chat_members WHERE chat_id = " + chat_id + " AND user_id = " + user_id + ";");
                 
-                
-                
                 if (result_forbidden->size() == 0)
                 {
                     response.start_line[1] = "403";

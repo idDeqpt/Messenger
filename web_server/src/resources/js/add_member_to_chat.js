@@ -15,6 +15,6 @@ async function add_member()
 						else if (response.status == 409)
 							document.getElementById("warning-field").innerHTML = "Пользователь уже добавлен";
 						else
-							document.getElementById("warning-field").innerHTML = "";
+							document.getElementById("warning-field").innerHTML = "Успешно";
 	});
 }
