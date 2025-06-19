@@ -7,7 +7,7 @@
 		<script type="text/javascript" src="js/check_token.js"></script>
 		<script type="text/javascript" src="chats/on_load.js"></script>
 
-		<link rel="stylesheet" href="css/header.css">
+		<link rel="stylesheet" href="/css/header.css">
 		<link rel="stylesheet" href="chats/style.css">
 		<script type="text/javascript" src="js/exit.js"></script>
 	</head>
@@ -22,8 +22,8 @@
 		</div>
 		<div class="main">
 			<div class="main-header">
-				<button onclick="window.location.assign('/chats')">Создать личный чат</button>
-				<button onclick="window.location.assign('/chats')">Создать общий чат</button>
+				<button onclick="window.location.assign('/chats/create?type=user')">Создать личный чат</button>
+				<button onclick="window.location.assign('/chats/create?type=group')">Создать общий чат</button>
 			</div>
 
 			<table id="chats-table"></table>
