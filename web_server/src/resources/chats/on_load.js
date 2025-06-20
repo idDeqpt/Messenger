@@ -4,15 +4,11 @@ check_token("http://127.0.0.1:8008/get_user_chats", {method: "GET"}, function(re
 		console.log(data);
 		for (let i = 0; i < data.chats.length; i++)
 		{
-			document.getElementById("chats-table").innerHTML += "\
-				<tr>\
-					<td>\
-						<img>\
-						<div onclick=\"window.location.assign('/chat?id=" + data.chats[i].id + "');\">\
-							<a>" + data.chats[i].name + "</a>\
-						</div>\
-					</td>\
-				</tr>";
+			document.getElementById("main-chats").innerHTML += "\
+				<div class=\"main-chats-chat\" onclick=\"window.location.assign('/chat?id=" + data.chats[i].id + "');\">\
+					<a>" + data.chats[i].name + "</a>\
+					<a>last message</a>\
+				</div>";
 		}
 	});
 });
