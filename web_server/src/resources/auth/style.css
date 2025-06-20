@@ -1,8 +1,34 @@
+body {
+    margin: 0px;
+    background-color: #EFEABF;
+}
+
 .main {
+	margin-top: 10px;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: row;
 	align-items: center;
-	border: 4px solid;
+}
+
+.main-table {
+	min-width: 300px;
+	border: 2px solid;
+	border-color: #DD9E1F;
+}
+
+.main-table input {
+	width: 90%;
+}
+
+.main-table-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.main-table-buttons button {
+	min-width: 100px;
 }
 
 .warning {

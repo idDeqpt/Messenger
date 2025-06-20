@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div class="main">
-			<table>
+			<table class="main-table">
 				<tr>
 					<td colspan="2"><center><a>Регистрация/Вход</a></center></td>
 				</tr>
@@ -17,11 +17,13 @@
 					<td><input type="text" id="login"></td>
 				</tr>
 					<td><a>Пароль</a></td>
-					<td><input type="text" id="password"></td>
+					<td><input type="password" id="password"></td>
 				</tr>
 				<tr>
-					<td><button onclick="signup();"><a>Зарегистрироваться</a></button></td>
-					<td><button onclick="login();"><a>Войти</a></button></td>
+					<td colspan="2"><div class="main-table-buttons">
+						<button onclick="signup();"><a>Зарегистрироваться</a></button>
+						<button onclick="login();"><a>Войти</a></button>
+					</div></td>
 				</tr>
 				<tr>
 					<td colspan="2" id="warning-field"></td>
