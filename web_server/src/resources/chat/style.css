@@ -1,10 +1,17 @@
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+}
+
 .main {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	border: 4px solid;
-	height: 100%;
+	height: calc(100% - 51.6px);
 	margin: 0 auto 0 auto;
 	
 	width: 70%;
@@ -14,18 +21,24 @@
 }
 
 .main-header {
+	width: 100%;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	border: 4px solid;
 }
 
 .main-messages {
 	width: 100%;
-	heigth: 100%;
-	max: 100%;
+	height: 100%;
+	flex-grow: 1;
 	overflow-y: auto;
-	border: 4px solid;
+	border-top: 2px solid;
+	border-bottom: 2px solid;
+	@media (min-aspect-ratio: 1/1) {
+		border-left: 2px solid;
+		border-right: 2px solid;
+	}
+	border-color: #DD9E1F;
 }
 
 .main-footer {
