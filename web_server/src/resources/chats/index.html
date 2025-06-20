@@ -3,23 +3,18 @@
 	<head>
 		<title>Chats</title>
 		<link rel="icon" href="favicon.png" type="image/x-icon">
-		<script type="text/javascript" src="js/update_token.js"></script>
-		<script type="text/javascript" src="js/check_token.js"></script>
-		<script type="text/javascript" src="chats/on_load.js"></script>
+		<script type="text/javascript" src="/js/update_token.js"></script>
+		<script type="text/javascript" src="/js/check_token.js"></script>
 
 		<link rel="stylesheet" href="/css/header.css">
 		<link rel="stylesheet" href="chats/style.css">
-		<script type="text/javascript" src="js/exit.js"></script>
+		<script type="text/javascript" src="/js/display_header.js"></script>
+		<script type="text/javascript" src="/js/exit.js"></script>
 	</head>
 	<body>
-		<div class="header">
-			<img src="favicon.png" alt="icon">
-			<div class="header-label"><a>Чаты</a></div>
-			<div class="header-buttons">
-				<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
-				<button onclick="exit();"><a>Выйти</a></button>
-			</div>
-		</div>
+		<div id="header" class="header"></div>
+		<script type="text/javascript">display_header("Чаты");</script>
+
 		<div class="main">
 			<div class="main-header">
 				<button onclick="window.location.assign('/chats/create?type=user')">Создать личный чат</button>
@@ -28,5 +23,7 @@
 
 			<table id="chats-table"></table>
 		</div>
+		
+		<script type="text/javascript" src="chats/on_load.js"></script>
 	</body>
 </html>

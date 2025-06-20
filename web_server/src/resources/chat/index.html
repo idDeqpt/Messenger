@@ -3,23 +3,18 @@
 	<head>
 		<title>Chat</title>
 		<link rel="icon" href="favicon.png" type="image/x-icon">
-		<script type="text/javascript" src="js/update_token.js"></script>
-		<script type="text/javascript" src="js/check_token.js"></script>
+		<script type="text/javascript" src="/js/update_token.js"></script>
+		<script type="text/javascript" src="/js/check_token.js"></script>
 
 		<link rel="stylesheet" href="/css/header.css">
 		<link rel="stylesheet" href="chat/style.css">
+		<script type="text/javascript" src="/js/display_header.js"></script>
 		<script type="text/javascript" src="js/exit.js"></script>
 		<script type="text/javascript" src="js/send_message.js"></script>
 	</head>
 	<body>
-		<div class="header">
-			<img src="favicon.png" alt="icon">
-			<div class="header-label"><a>Чат</a></div>
-			<div class="header-buttons">
-				<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
-				<button onclick="exit();"><a>Выйти</a></button>
-			</div>
-		</div>
+		<div id="header" class="header"></div>
+		<script type="text/javascript">display_header("Чат");</script>
 
 		<div class="main">
 			<div id="main-header" class="main-header">
@@ -30,7 +25,7 @@
 			<div id="messages-table" class="main-messages"></div>
 
 			<div class="main_footer">
-				<input type="text" id="message-text" value="Введите текст...">
+				<input type="text" id="message-text">
 				<button type="text" onclick="send_message();"><a>Отправить</a></button>
 			</div>
 		</div>

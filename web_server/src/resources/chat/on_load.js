@@ -1,6 +1,7 @@
 var messages_count = 0;
+var users;
 
-async function messages_handler(users)
+async function messages_handler()
 {
 	await check_token("http://127.0.0.1:8008/get_chat_messages" + document.location.search, {method: "GET"}, async function(response){
 		let data = await response.json();
@@ -24,8 +25,9 @@ async function messages_handler(users)
 check_token("http://127.0.0.1:8008/get_chat_data" + document.location.search, {method: "GET"}, async function(response){
 	const data = await response.json();
 
-	await messages_handler(data.members);
-	setInterval(async ()=>{await messages_handler(data.chat_members);}, 2000);
+	users = data.members;
+	await messages_handler();
+	setInterval(async ()=>{await messages_handler();}, 2000);
 
 	document.getElementById("main-header-chatname").innerHTML += data.name;
 	document.getElementById("main-header").innerHTML += (data.type == "group") ? "\

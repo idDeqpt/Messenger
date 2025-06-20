@@ -8,18 +8,13 @@
 
 		<link rel="stylesheet" href="/css/header.css">
 		<link rel="stylesheet" href="profile/style.css">
+		<script type="text/javascript" src="/js/display_header.js"></script>
 		<script type="text/javascript" src="/js/exit.js"></script>
 		<script type="text/javascript" src="/js/change_username.js"></script>
 	</head>
 	<body>
-		<div class="header">
-			<img src="/favicon.png" alt="icon">
-			<div class="header-label"><a>Профиль</a></div>
-			<div class="header-buttons">
-				<button onclick="window.location.assign('/chats')"><a>Чаты</a></button>
-				<button onclick="exit();"><a>Выйти</a></button>
-			</div>
-		</div>
+		<div id="header" class="header"></div>
+		<script type="text/javascript">display_header("Профиль");</script>
 
 		<div class="main">
 			<table>

@@ -8,19 +8,13 @@
 
 		<link rel="stylesheet" href="/css/header.css">
 		<link rel="stylesheet" href="params/style.css">
+		<script type="text/javascript" src="/js/display_header.js"></script>
 		<script type="text/javascript" src="/js/exit.js"></script>
 		<script type="text/javascript" src="/js/add_member_to_chat.js"></script>
 	</head>
 	<body>
-		<div class="header">
-			<img src="/favicon.png" alt="icon">
-			<div class="header-label"><a>Параметры чата</a></div>
-			<div id="header-buttons" class="header-buttons">
-				<button onclick="window.history.go(-1)"><a>Назад</a></button>
-				<button onclick="window.location.assign('/profile')"><a>Профиль</a></button>
-				<button onclick="exit();"><a>Выйти</a></button>
-			</div>
-		</div>
+		<div id="header" class="header"></div>
+		<script type="text/javascript">display_header("Параметры");</script>
 
 		<div class="main">
 			<table>
