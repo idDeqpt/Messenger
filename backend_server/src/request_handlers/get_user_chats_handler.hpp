@@ -33,9 +33,7 @@ namespace handlers
                 std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
                 std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
                 std::shared_ptr<db::DataBuffer> result = db::exec("SELECT chat_id FROM chat_members WHERE user_id = " + user_id + ";");
-                /*
-                    chats: [{id, name, type}, {...}]
-                */
+                
                 jst::JSObject json;
                 json.addField("chats", std::make_shared<jst::JSArray>());
                 for (unsigned int i = 0; i < result->size(); i++)
@@ -49,10 +47,23 @@ namespace handlers
                         chat_data->back()["name"] = name_data2->back()["username"];
                     }
 
+                    std::shared_ptr<db::DataBuffer> last_message_data = db::exec("\
+                        SELECT users.username, messages.text\
+                        FROM users INNER JOIN messages\
+                        ON users.id = messages.user_id\
+                        WHERE messages.chat_id = " + result->at(i)["chat_id"] + " AND messages.id = (SELECT MAX(messages.id) FROM messages WHERE messages.chat_id = " + result->at(i)["chat_id"] + ");");
+                    jst::JSObject last_message;
+                    if (last_message_data->size() > 0)
+                    {
+                        last_message.addField("sender_username", std::make_shared<jst::JSString>(last_message_data->back()["username"]));
+                        last_message.addField("text", std::make_shared<jst::JSString>(last_message_data->back()["text"]));
+                    }
+
                     jst::JSObject chat_obj;
                     chat_obj.addField("id", std::make_shared<jst::JSNumber>(stoi(result->at(i)["chat_id"])));
                     chat_obj.addField("name", std::make_shared<jst::JSString>(chat_data->back()["name"]));
                     chat_obj.addField("type", std::make_shared<jst::JSString>(chat_data->back()["type"]));
+                    chat_obj.addField("last_message", std::make_shared<jst::JSObject>(last_message));
                     std::static_pointer_cast<jst::JSArray>(json["chats"])->pushBack(std::make_shared<jst::JSObject>(chat_obj));
                 }
 
