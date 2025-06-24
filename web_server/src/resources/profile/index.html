@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
 		<title>Профиль</title>
-		<link rel="icon" href="favicon.png" type="image/x-icon">
+
+		<link rel="icon" href="/favicon.png" type="image/x-icon">
 		<script type="text/javascript" src="/js/update_token.js"></script>
 		<script type="text/javascript" src="/js/check_token.js"></script>
 
@@ -17,15 +20,16 @@
 		<script type="text/javascript">display_header("Профиль");</script>
 
 		<div class="main">
-			<table>
-				<tr>
-					<td><a>Имя</a></td>
-					<td><a id="current-username"></a></td>
-					<td><input type="text" id="username"></td>
-					<td><button onclick="change_username();"><a>Изменить</a></button></td>
-				</tr>
-				<tr><td colspan="4" id="warning-field"></td></tr>
-			</table>
+			<div class="main-header">
+				<div class="main-header-info">
+					<img id="main-header-info-photo" alt="profile photo">
+					<div class="main-header-info-names">
+						<a id="main-header-info-username">Name</a>
+						<a id="main-header-info-description">Description</a>
+					</div>
+				</div>
+				<div><button onclick="window.location.assign('/profile/params' + document.location.search);"><a>Параметры</a></button></div>
+			</div>
 		</div>
 		
 		<script type="text/javascript" src="profile/on_load.js"></script>

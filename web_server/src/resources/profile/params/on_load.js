@@ -5,8 +5,8 @@ let user_id = (params.get("id") == null) ? JSON.parse(atob(token_payload))["id"]
 check_token("http://127.0.0.1:8008/get_profile_data?id=" + user_id, {method: "GET"}, function(response){
 	response.json().then(data => {
 		console.log(data);
-		document.getElementById("main-header-info-photo").setAttribute("src", "data:img/png;base64, " + data.profile_photo_64);
-		document.getElementById("main-header-info-username").innerHTML = data.username;
-		document.getElementById("main-header-info-description").innerHTML = (data.description == "") ? "No description" : data.description;
+		document.getElementById("main-photo-img").setAttribute("src", "data:img/png;base64, " + data.profile_photo_64);
+		document.getElementById("main-username-value").innerHTML = data.username;
+		document.getElementById("main-description-value").innerHTML = (data.description == "") ? "No description" : data.description;
 	});
 });
