@@ -20,21 +20,22 @@
 		<script type="text/javascript">display_header("Профиль");</script>
 
 		<div class="main">
-			<div class="main-photo">
-				<img id="main-photo-img" class="main-photo-img" alt="Profile photo">
+			<div id="main-photo" class="main-photo">
+				<img id="main-photo-current" class="main-photo-current" alt="Profile photo">
 				<input type="file" accept=".png" onchange="change_profile_photo(this.files[0])">
+				<a id="main-photo-warning">Загрузка изображения</a>
 			</div>
-			<div class="main-warning-field">
+			<div id="main-warning-field" class="main-warning-field">
 				<div class="main-username">
 					<a>Имя</a>
-					<a id="main-username-value">Name</a>
-					<input>
-					<button>Изменить</button>
+					<a id="main-username-current">Name</a>
+					<input id="main-username-input">
+					<button onclick="change_username();">Изменить</button>
 				</div>
 			</div>
 			<div class="main-description">
 				<a>Описание</a>
-				<a id="main-description-value">Description</a>
+				<a id="main-description-current">Description</a>
 				<div class="main-description-change">
 					<input>
 					<button><a>Измненить</a></button>
