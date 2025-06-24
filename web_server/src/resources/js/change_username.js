@@ -1,7 +1,7 @@
 function change_username()
 {
 	let username_value = document.getElementById("main-username-input").value
-	check_token("http://127.0.0.1:8008/change_username?username=" + username_value, {method: "POST"}, function(response) {
+	check_token("http://127.0.0.1:8008/change_username?username_64=" + btoa(String.fromCodePoint(...(new TextEncoder().encode(username_value)))), {method: "POST"}, function(response) {
 		console.log(response.status);
 		if (response.status == 409)
 		{

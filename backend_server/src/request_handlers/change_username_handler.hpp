@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "tools/database.hpp"
+#include "tools/base64.hpp"
 #include "tools/jwt.hpp"
 
 
@@ -30,7 +31,7 @@ namespace handlers
             }
             else
             {
-                std::string new_username = uri.getParamsPtr()["username"];
+                std::string new_username = Base64::decode(uri.getParamsPtr()["username_64"]);
                 std::shared_ptr<db::DataBuffer> result = db::exec("SELECT id FROM users WHERE username = \"" + new_username + "\";");
                 
                 if (result->size() > 0)
