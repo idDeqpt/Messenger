@@ -4,8 +4,6 @@ function change_profile_photo(file)
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-    	console.log(reader.result);
-    	console.log(reader.result.slice(reader.result.indexOf(",") + 1));
     	send_body = {
 			photo_64: reader.result.slice(reader.result.indexOf(",") + 1)
 		};
