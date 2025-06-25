@@ -32,7 +32,6 @@ namespace handlers
             else
             {
                 std::string new_description = Base64::decode(uri.getParamsPtr()["description_64"]);
-                std::cout << "DESC: " << new_description << std::endl;
 
                 std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
                 std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();

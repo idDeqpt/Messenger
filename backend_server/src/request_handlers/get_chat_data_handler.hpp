@@ -4,6 +4,8 @@
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
 #include <unordered_map>
+#include <fstream>
+#include <sstream>
 #include <utility>
 #include <string>
 #include <memory>
@@ -30,7 +32,7 @@ namespace handlers
             else
             {
                 std::string chat_id = uri.getParamsPtr()["id"];
-                std::shared_ptr<db::DataBuffer> chat_members_data = db::exec("SELECT chat_members.user_id, users.username\
+                std::shared_ptr<db::DataBuffer> chat_members_data = db::exec("SELECT chat_members.user_id, users.username, users.has_profile_photo\
                                                                               FROM chat_members\
                                                                               INNER JOIN users ON chat_members.user_id = users.id\
                                                                               WHERE chat_members.chat_id = " + chat_id + ";");
@@ -50,9 +52,19 @@ namespace handlers
 
                 for (unsigned int i = 0; i < chat_members_data->size(); i++)
                 {
+                    std::ifstream file;
+                    if (chat_members_data->at(i)["has_profile_photo"] == "1")
+                        file.open("resources/profile_photos/" + chat_members_data->at(i)["user_id"] + ".png", std::ios::binary);
+                    else
+                        file.open("resources/profile_photos/default.png", std::ios::binary);
+                    std::ostringstream photo_bin;
+                    photo_bin << file.rdbuf();
+                    file.close();
+
                     jst::JSObject member;
                     member.addField("id", std::make_shared<jst::JSNumber>(stoi(chat_members_data->at(i)["user_id"])));
                     member.addField("username", std::make_shared<jst::JSString>(chat_members_data->at(i)["username"]));
+                    member.addField("profile_photo_64", std::make_shared<jst::JSString>(Base64::encode(photo_bin.str())));
                     std::static_pointer_cast<jst::JSArray>(json_chat["members"])->pushBack(std::make_shared<jst::JSObject>(member));
                 }
 

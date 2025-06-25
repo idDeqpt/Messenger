@@ -7,18 +7,32 @@ async function messages_handler()
 		let data = await response.json();
 		if (data.messages == null) return;
 
+		let messages_table = document.getElementById("messages-table");
+
+		let can_scroll = false;
+		if ((messages_table.scrollTop + messages_table.clientHeight + 5) >= messages_table.scrollHeight)
+			can_scroll = true;
+
 		for (let i = messages_count; i < data.messages.length; i++)
-			document.getElementById("messages-table").innerHTML += "\
-				<div>\
-					<div>\
-						<a>" + users.find(obj => (obj.id == data.messages[i].user_id)).username + "</a>\
-					</div>\
-					<div>\
-						<a>" + data.messages[i].text + "</a>\
+		{
+			let user = users.find(obj => (obj.id == data.messages[i].user_id));
+			messages_table.innerHTML += "\
+				<div class=\"main-message\">\
+					<img class=\"main-message-photo\" alt=\"Profile photo\" src=\"data:img/png;base64, " + user.profile_photo_64 + "\">\
+					<div class=\"main-message-text\">\
+						<div class=\"main-message-text-username\">\
+							<a>" + user.username + "</a>\
+						</div>\
+						<div class=\"main-message-text-content\">\
+							<a>" + data.messages[i].text + "</a>\
+						</div>\
 					</div>\
 					<br>\
 				</div>";
+		}
 		messages_count = data.messages.length;
+		if (can_scroll)
+  			messages_table.scrollTop = messages_table.scrollHeight;
 	});
 }
 
