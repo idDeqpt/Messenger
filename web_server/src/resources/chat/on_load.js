@@ -21,7 +21,7 @@ async function messages_handler()
 					<img class=\"main-message-photo\" alt=\"Profile photo\" src=\"data:img/png;base64, " + user.profile_photo_64 + "\">\
 					<div class=\"main-message-text\">\
 						<div class=\"main-message-text-username\">\
-							<a>" + user.username + "</a>\
+							<a class=\"main-message-text-username-value\" href=\"/profile?id=" + user.id + "\">" + user.username + "</a>\
 						</div>\
 						<div class=\"main-message-text-content\">\
 							<a>" + data.messages[i].text + "</a>\

@@ -53,6 +53,12 @@ body {
 	border-color: #aaa;
 }
 
+.main-message-text-username-value {
+	text-decoration: none;
+	font-weight: bold;
+	color: #b97c01;
+}
+
 .main-footer {
 
 }
