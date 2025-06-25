@@ -1,6 +1,9 @@
 const params = new URLSearchParams(document.location.search);
 let token_payload = localStorage.getItem("access_token").split(".")[1];
-let user_id = (params.get("id") == null) ? JSON.parse(atob(token_payload))["id"] : params.get("id");
+let self_page = params.get("id") == null;
+let user_id = (self_page) ? JSON.parse(atob(token_payload))["id"] : params.get("id");
+if (self_page)
+	document.getElementById("main-header").innerHTML += "<div><button onclick=\"window.location.assign('/profile/params' + document.location.search);\"><a>Параметры</a></button></div>";
 
 check_token("http://127.0.0.1:8008/get_profile_data?id=" + user_id, {method: "GET"}, function(response){
 	response.json().then(data => {
