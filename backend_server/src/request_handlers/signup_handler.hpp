@@ -37,7 +37,7 @@ namespace handlers
                 std::cout << "ID: " << id << std::endl;
                 db::exec("INSERT INTO users (username, login_hash, password_hash)\
                           VALUES (\"" + id + "\", \"" + login + "\", \"" + password + "\");");
-                std::pair<std::string, std::string> tokens = generateJWT(id, 60*60, 60*60*24);
+                std::pair<std::string, std::string> tokens = generateJWT(id, 60*60, 60*60*24*7);
 
                 jst::JSObject json;
                 json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));

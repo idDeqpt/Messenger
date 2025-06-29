@@ -127,11 +127,24 @@ int main()
             case ServerStates::INIT:
             {
                 std::string localhost;
-                std::cout << "Start on localhost (\"1\" for accept): ";
+                std::cout << "Start on 0.0.0.0 (\"1\" for accept): ";
                 std::cin >> localhost;
 
-                server.init(80, localhost == "1");
-                server.start(1);
+                if (localhost == "1")
+                {
+                    std::string port;
+                    std::cout << "Enter the port: ";
+                    std::cin >> port;
+                    server.init(stoi(port));
+                }
+                else
+                {
+                    std::string addr;
+                    std::cout << "Enter the address: ";
+                    std::cin >> addr;
+                    server.init(net::Address(addr));
+                }
+                server.start();
 
                 std::cout << "Server address: " << server.getSelfAddress().toString() << std::endl;
 
@@ -170,7 +183,7 @@ int main()
 
                 if (command == "1")
                 {
-                    server.start(1);
+                    server.start();
                     state = ServerStates::PROCESS;
                 }
                 else

@@ -29,7 +29,7 @@ namespace handlers
             else
             {
                 std::string id = result->back()["id"];
-                std::pair<std::string, std::string> tokens = generateJWT(id, 60*60, 60*60*24);
+                std::pair<std::string, std::string> tokens = generateJWT(id, 60*60, 60*60*24*7);
 
                 jst::JSObject json;
                 json.addField("access_token", std::make_shared<jst::JSString>(tokens.first));
