@@ -1,6 +1,6 @@
 async function update_token(url, options, func)
 {
-	const response = await fetch("http://127.0.0.1:8008/update_token", {
+	const response = await fetch("http://" + api_host + "/update_token", {
 		method: "POST",
 		headers: {"Authorization": localStorage.getItem("refresh_token")}
 	});

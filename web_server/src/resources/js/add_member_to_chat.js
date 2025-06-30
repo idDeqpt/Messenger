@@ -5,7 +5,7 @@ async function add_member()
 		chat_id: Number(params.get("id")),
 		username: document.getElementById("username").value
 	};
-	await check_token("http://127.0.0.1:8008/add_member_to_chat",
+	await check_token("http://" + api_host + "/add_member_to_chat",
 		{method: "POST", body: JSON.stringify(send_body)},
 		async function(response){
 			if (response.status == 404)

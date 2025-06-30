@@ -7,7 +7,7 @@ function change_profile_photo(file)
     	send_body = {
 			photo_64: reader.result.slice(reader.result.indexOf(",") + 1)
 		};
-		check_token("http://127.0.0.1:8008/change_profile_photo", {method: "POST", body: JSON.stringify(send_body)}, function(response){
+		check_token("http://" + api_host + "/change_profile_photo", {method: "POST", body: JSON.stringify(send_body)}, function(response){
 			console.log(response.status);
 			if (response.status == 200)
 			{

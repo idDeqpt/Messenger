@@ -47,8 +47,9 @@ std::unique_ptr<std::string> load_file_data_ptr(std::string path)
 }
 
 
-std::string http_handler(net::HTTPServer& server, std::string request)
+std::string http_handler(net::TCPServer* server, std::string request)
 {
+    net::HTTPServer* http_server = dynamic_cast<net::HTTPServer*>(server);
     net::HTTPResponse response;
     net::HTTPRequest req(request);
     net::URI uri(req.start_line[1]);
@@ -61,7 +62,7 @@ std::string http_handler(net::HTTPServer& server, std::string request)
 
     std::unique_ptr<std::string> data_ptr = load_file_data_ptr("resources" + path);
     if (data_ptr == nullptr)
-        return server.get404Handler()().toString();
+        return http_server->get404Handler()().toString();
 
     response.body = *data_ptr;
     response.start_line[0] = "HTTP/1.1";
@@ -92,7 +93,7 @@ int main()
     };
 
     net::HTTPServer server;
-    server.setHTTPHandler(http_handler);
+    server.setRequestHandler(http_handler);
 
     Timer timer;
     while (state != ServerStates::EXIT)

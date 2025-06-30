@@ -6,7 +6,7 @@ async function send_message()
 		text: document.getElementById("message-text").value
 	};
 	document.getElementById("message-text").value = "";
-	await check_token("http://127.0.0.1:8008/send_message",
+	await check_token("http://" + api_host + "/send_message",
 					  {method: "POST", body: JSON.stringify(send_body)},
 					  async function(response){});
 }

@@ -13,7 +13,7 @@ function signup()
 		password: password_value
 	}).toString();
 
-	fetch("http://127.0.0.1:8008/signup?" + params, {method: "POST"}).then(response => {
+	fetch("http://" + api_host + "/signup?" + params, {method: "POST"}).then(response => {
 		console.log("fetch", response.ok);
 		console.log(response.headers);
 
@@ -44,7 +44,7 @@ function login()
 		login: login_value,
 		password: password_value
 	}).toString();
-	fetch("http://127.0.0.1:8008/login?" + params, {method: "POST"}).then(response => {
+	fetch("http://" + api_host + "/login?" + params, {method: "POST"}).then(response => {
 		console.log("fetch", response.ok);
 		console.log(response);
 

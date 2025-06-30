@@ -1,4 +1,4 @@
-check_token("http://127.0.0.1:8008/get_user_chats", {method: "GET"}, function(response){
+check_token("http://" + api_host + "/get_user_chats", {method: "GET"}, function(response){
 	response.json().then(data => {
 		for (let i = 0; i < data.chats.length; i++)
 		{
