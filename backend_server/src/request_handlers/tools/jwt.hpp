@@ -34,7 +34,8 @@ namespace jwt
 		std::string payload = token.substr(left_point + 1, right_point - left_point - 1);
 
 		jst::JSON json;
-		json.parse(Base64::decode(payload));
+		std::string decoded_payload = Base64::decode(payload);
+		json.parse(decoded_payload);
 		return std::static_pointer_cast<jst::JSObject>(json.getParseResult());
 	}
 
@@ -75,7 +76,8 @@ namespace jwt
 			return TokenError::INVALID_SIGNATURE;
 
 		jst::JSON json;
-		json.parse(Base64::decode(payload));
+		std::string decoded_payload = Base64::decode(payload);
+		json.parse(decoded_payload);
 		std::shared_ptr<jst::JSObject> payload_ptr = std::static_pointer_cast<jst::JSObject>(json.getParseResult());
 
 		time_t cur_time;
