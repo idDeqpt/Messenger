@@ -1,14 +1,24 @@
 cmake_minimum_required(VERSION 3.4.0)
 
 set(PROJECT_NAME messenger_server)
-set(PATH_TO_NETWORK "C:/Projects/C++/libraries/Network/include")
+if (WIN32)
+	set(PATH_TO_NETWORK "C:/Projects/C++/libraries/Network/include")
+else()
+	set(PATH_TO_NETWORK "/home/deqpt/projects/libs/Network/include")
+endif()
+
 
 project(${PROJECT_NAME} CXX)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PATH_TO_NETWORK})
-target_link_libraries(${PROJECT_NAME} PRIVATE "C:/Projects/C++/libraries/Network/bin/lib/Debug/network.lib")
+
+if (WIN32)
+	target_link_libraries(${PROJECT_NAME} PRIVATE "C:/Projects/C++/libraries/Network/bin/lib/Debug/network.lib")
+else()
+	target_link_libraries(${PROJECT_NAME} PRIVATE "/home/deqpt/projects/libs/Network/bin/lib/libnetwork.so")
+endif()
 
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 

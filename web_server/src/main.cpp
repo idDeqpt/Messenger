@@ -11,12 +11,8 @@
 #include "Network/URL.hpp"
 #include "Network/HTTP.hpp"
 #include "Network/HTTPServer.hpp"
-#include "Network/HTTPRequests.hpp"
-#include "Network/TCPServer.hpp"
-#include "Network/TCPClient.hpp"
 #include "Network/ServerSessionData.hpp"
 #include "Network/Timer.hpp"
-#include <windows.h>
 
 
 std::string get_content_type(std::string path)
@@ -54,8 +50,6 @@ std::string http_handler(net::TCPServer* server, std::string request)
     net::HTTPRequest req(request);
     net::URI uri(req.start_line[1]);
     std::string path = uri.toString(false);
-    std::cout << "PATH: " << path << std::endl;
-    std::cout << "PATH1: " << uri.toString(true) << std::endl;
 
     if (path.find(".") == std::string::npos)
         path += "/index.html";
@@ -127,27 +121,15 @@ int main()
 
             case ServerStates::INIT:
             {
-                std::string localhost;
-                std::cout << "Start on 0.0.0.0 (\"1\" for accept): ";
-                std::cin >> localhost;
+                std::string port;
+                std::cout << "Enter the port: ";
+                std::cin >> port;
+                int init_status = server.init(stoi(port));
 
-                if (localhost == "1")
-                {
-                    std::string port;
-                    std::cout << "Enter the port: ";
-                    std::cin >> port;
-                    server.init(stoi(port));
-                }
+                if (server.start())
+                    std::cout << "Server start completed" << std::endl;
                 else
-                {
-                    std::string addr;
-                    std::cout << "Enter the address: ";
-                    std::cin >> addr;
-                    server.init(net::Address(addr));
-                }
-                server.start();
-
-                std::cout << "Server address: " << server.getSelfAddress().toString() << std::endl;
+                    std::cout << "Server start incompleted: " << init_status << std::endl;
 
                 state = ServerStates::PROCESS;
             } break;

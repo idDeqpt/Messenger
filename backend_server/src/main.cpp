@@ -8,7 +8,6 @@
 
 #include "handlers.hpp"
 
-#include <windows.h>
 
 int main()
 {
@@ -61,27 +60,15 @@ int main()
 
             case ServerStates::INIT:
             {
-                std::string localhost;
-                std::cout << "Start on 0.0.0.0 (\"1\" for accept): ";
-                std::cin >> localhost;
+                std::string port;
+                std::cout << "Enter the port: ";
+                std::cin >> port;
+                int init_status = server.init(stoi(port));
 
-                if (localhost == "1")
-                {
-                    std::string port;
-                    std::cout << "Enter the port: ";
-                    std::cin >> port;
-                    server.init(stoi(port));
-                }
+                if (server.start())
+                    std::cout << "Server start completed" << std::endl;
                 else
-                {
-                    std::string addr;
-                    std::cout << "Enter the address: ";
-                    std::cin >> addr;
-                    server.init(net::Address(addr));
-                }
-                server.start();
-
-                std::cout << "Server address: " << server.getSelfAddress().toString() << std::endl;
+                    std::cout << "Server start incompleted: " << init_status << std::endl;
 
                 state = ServerStates::PROCESS;
             } break;
