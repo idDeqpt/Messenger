@@ -36,7 +36,7 @@ async function messages_handler()
 	});
 }
 
-check_token("http://127.0.0.1:8008/get_chat_data" + document.location.search, {method: "GET"}, async function(response){
+check_token("http://" + api_host + "/get_chat_data" + document.location.search, {method: "GET"}, async function(response){
 	const data = await response.json();
 
 	users = data.members;
