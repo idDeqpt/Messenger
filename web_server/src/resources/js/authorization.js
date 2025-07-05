@@ -20,8 +20,8 @@ function signup()
 		if (response.ok)
 		{
 			response.json().then(data => {
-				localStorage.setItem("access_token", data.access_token);
-				localStorage.setItem("refresh_token", data.refresh_token);
+				window.localStorage.setItem("access_token", data.access_token);
+				window.localStorage.setItem("refresh_token", data.refresh_token);
 			});
 			window.location.assign("/chats");
 		}
@@ -51,8 +51,8 @@ function login()
 		if (response.ok)
 		{
 			response.json().then(data => {
-				localStorage.setItem("access_token", data.access_token);
-				localStorage.setItem("refresh_token", data.refresh_token);
+				window.localStorage.setItem("access_token", data.access_token);
+				window.localStorage.setItem("refresh_token", data.refresh_token);
 			});
 			window.location.assign("/chats");
 		}
