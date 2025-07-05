@@ -32,11 +32,9 @@ namespace handlers
             else
             {
                 std::shared_ptr<db::DataBuffer> result2 = db::exec("SELECT MAX(id) FROM users");
-                std::cout << "SIZE: " << result2->size() << std::endl;
-                std::string id = "id" + result2->back()["MAX(id)"];
-                std::cout << "ID: " << id << std::endl;
+                std::string id = std::to_string(stoi(result2->back()["MAX(id)"]) + 1);
                 db::exec("INSERT INTO users (username, login_hash, password_hash)\
-                          VALUES (\"" + id + "\", \"" + login + "\", \"" + password + "\");");
+                          VALUES (\"id" + id + "\", \"" + login + "\", \"" + password + "\");");
                 std::pair<std::string, std::string> tokens = generateJWT(id, 60*60, 60*60*24*7);
 
                 jst::JSObject json;
