@@ -31,6 +31,7 @@ namespace handlers
             }
             else
             {
+                std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
                 std::string chat_id = uri.getParamsPtr()["id"];
                 std::shared_ptr<db::DataBuffer> chat_members_data = db::exec("SELECT chat_members.user_id, users.username, users.has_profile_photo\
                                                                               FROM chat_members\
@@ -40,8 +41,8 @@ namespace handlers
                 if (chat_data->back()["type"] == "user")
                 {
                     std::shared_ptr<db::DataBuffer> user_data = db::exec("SELECT user_id FROM chat_members WHERE chat_id = " + chat_id + ";");
-                    std::string user_id = (user_id == user_data->at(0)["user_id"]) ? user_data->at(1)["user_id"] : user_data->at(0)["user_id"];
-                    std::shared_ptr<db::DataBuffer> name_data = db::exec("SELECT username FROM users WHERE id = " + user_id + ";");
+                    std::string id = (user_id == user_data->at(0)["user_id"]) ? user_data->at(1)["user_id"] : user_data->at(0)["user_id"];
+                    std::shared_ptr<db::DataBuffer> name_data = db::exec("SELECT username FROM users WHERE id = " + id + ";");
                     chat_data->back()["name"] = name_data->back()["username"];
                 }
                 
