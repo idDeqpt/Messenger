@@ -31,6 +31,7 @@ namespace handlers
             }
             else
             {
+                std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
                 std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
                 std::string chat_id = uri.getParamsPtr()["id"];
                 std::shared_ptr<db::DataBuffer> chat_members_data = db::exec("SELECT chat_members.user_id, users.username, users.has_profile_photo\
