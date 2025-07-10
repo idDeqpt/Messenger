@@ -1,13 +1,24 @@
+html {
+	height: 100%;
+}
+
 body {
+	height: 100%;
     margin: 0px;
     background-color: #EFEABF;
 }
 
+a {
+	@media (max-aspect-ratio: 1/1) {
+		font-size: 80px;
+	}
+}
+
 .main {
-	margin-top: 10px;
+	height: 100%;
+	margin: 10px;
 	display: flex;
 	flex-direction: column;
-	justify-content: row;
 	align-items: center;
 }
 
@@ -15,22 +26,55 @@ body {
 	min-width: 300px;
 	border: 2px solid;
 	border-color: #DD9E1F;
+
+
+	@media (max-aspect-ratio: 1/1) {
+		width: 100%;
+		border: 0px;
+		border-spacing: 20px;
+	}
 }
 
 .main-table input {
 	width: 90%;
+	border-radius: 10px;
+
+	@media (max-aspect-ratio: 1/1) {
+		width: 100%;
+		font-size: 80px;
+	}
 }
 
 .main-table-buttons {
 	display: flex;
-	flex-direction: row;
 	justify-content: space-around;
+
+	flex-direction: row;
+	@media (max-aspect-ratio: 1/1) {
+		flex-direction: column-reverse;
+		gap: 10px;
+	}
 }
 
 .main-table-buttons button {
-	min-width: 100px;
+	background-color: #FFD98C;
+	border: 2px solid;
+	border-color: #DD9E1F;
+	border-radius: 50px;
+
+	@media (max-aspect-ratio: 1/1) {
+		width: 100%;
+	}
+}
+
+.main-table-buttons button:hover {
+	background-color: #E5D8BE;
 }
 
 .warning {
 	color: red;
+
+	@media (max-aspect-ratio: 1/1) {
+		font-size: 60px;
+	}
 }
