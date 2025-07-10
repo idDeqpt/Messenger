@@ -8,11 +8,10 @@ function change_profile_photo(file)
     	const img = new Image();
         img.src = reader.result;
         img.onload = function () {
-        	let width = 100;
+        	let size = 256;
             const canvas = document.createElement('canvas');
-            const ratio = img.height / img.width;
-            canvas.width = width;
-            canvas.height = width * ratio;
+            canvas.width = size;
+            canvas.height = size;
 
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
