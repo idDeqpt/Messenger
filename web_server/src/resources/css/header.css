@@ -25,10 +25,6 @@ body {
 	border-right: 1px solid;
 	border-color: #DD9E1F;
 	font-size: 20px;
-
-	@media (max-aspect-ratio: 1/1) {
-		display: block;
-	}
 }
 
 .header button:last-child {
