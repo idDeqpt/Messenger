@@ -45,6 +45,6 @@ check_token("http://" + api_host + "/get_chat_data" + document.location.search, 
 
 	document.getElementById("main-header-chatname").innerHTML += data.name;
 	document.getElementById("main-header").innerHTML += (data.type == "group") ? "\
-	<div><button onclick=\"window.location.assign('/chat/params" + document.location.search + "');\"><a>Парамтеры</a></button></div>\
+	<div><button onclick=\"window.location.assign('/chat/params" + document.location.search + "');\"><a>Параметры</a></button></div>\
 	" : "";
 });
