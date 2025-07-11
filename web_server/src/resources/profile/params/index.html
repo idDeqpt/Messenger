@@ -10,6 +10,7 @@
 		<script type="text/javascript" src="/js/check_token.js"></script>
 
 		<link rel="stylesheet" href="/css/header.css">
+		<link rel="stylesheet" href="/css/custom_button.css">
 		<link rel="stylesheet" href="params/style.css">
 		<script type="text/javascript" src="/js/display_header.js"></script>
 		<script type="text/javascript" src="/js/exit.js"></script>
@@ -23,25 +24,32 @@
 		<script type="text/javascript">display_header("Профиль");</script>
 
 		<div class="main">
-			<div id="main-photo" class="main-photo">
-				<img id="main-photo-current" class="main-photo-current" alt="Profile photo">
-				<input type="file" accept=".png" onchange="change_profile_photo(this.files[0])">
-				<a id="main-photo-warning">Загрузка изображения</a>
-			</div>
-			<div id="main-warning-field" class="main-warning-field">
-				<div class="main-username">
-					<a>Имя</a>
-					<a id="main-username-current">Name</a>
-					<input id="main-username-input">
-					<button onclick="change_username();">Изменить</button>
+			<div class="main-data">
+				<div id="main-data-photo" class="main-data-photo">
+					<div class="main-data-photo-current">
+						<img id="main-data-photo-current" alt="Profile photo">
+					</div>
+					<label class="custom-button">
+						<input class="main-data-photo-input" type="file" accept=".png" onchange="change_profile_photo(this.files[0])">
+						<center><span>Выбрать файл</span></center>
+					</label>
+					<a id="main-data-photo-warning">Загрузка изображения</a>
 				</div>
-			</div>
-			<div class="main-description">
-				<a>Описание</a>
-				<a id="main-description-current">Description</a>
-				<div class="main-description-change">
-					<input id="main-description-input">
-					<button onclick="change_description();"><a>Изменить</a></button>
+				<div class="main-data-names">
+					<div id="main-data-names-username" class="main-data-names-username">
+						<div class="main-data-names-username-value">
+							<a>Имя</a>
+							<a id="main-data-names-username-value-current">Name</a>
+							<input id="main-data-names-username-value-input">
+							<button class="custom-button" onclick="change_username();">Изменить</button>
+						</div>
+					</div>
+					<div class="main-data-names-description">
+						<a>Описание</a>
+						<a id="main-data-names-description-current">Description</a>
+						<input id="main-data-names-description-input">
+						<button class="custom-button" onclick="change_description();"><a>Изменить</a></button>
+					</div>
 				</div>
 			</div>
 		</div>

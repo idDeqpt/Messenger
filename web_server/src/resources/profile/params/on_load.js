@@ -5,9 +5,9 @@ let user_id = (params.get("id") == null) ? JSON.parse(atob(token_payload))["id"]
 check_token("http://" + api_host + "/get_profile_data?id=" + user_id, {method: "GET"}, function(response){
 	response.json().then(data => {
 		console.log(data);
-		document.getElementById("main-photo-current").setAttribute("src", "data:img/png;base64, " + data.profile_photo_64);
-		document.getElementById("main-username-current").innerHTML = data.username;
-		document.getElementById("main-description-current").innerHTML = (data.description == "") ? "No description" : data.description;
-		document.getElementById("main-photo-warning").remove();
+		document.getElementById("main-data-photo-current").setAttribute("src", "data:img/png;base64, " + data.profile_photo_64);
+		document.getElementById("main-data-names-username-value-current").innerHTML = data.username;
+		document.getElementById("main-data-names-description-current").innerHTML = (data.description == "") ? "No description" : data.description;
+		document.getElementById("main-data-photo-warning").remove();
 	});
 });

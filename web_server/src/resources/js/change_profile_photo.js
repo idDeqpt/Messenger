@@ -1,6 +1,6 @@
 function change_profile_photo(file)
 {
-	document.getElementById("main-photo").innerHTML += "<a id=\"main-photo-warning\">Загрузка изображения</a>";
+	document.getElementById("main-data-photo").innerHTML += "<a id=\"main-data-photo-warning\">Загрузка изображения</a>";
     let reader = new FileReader();
     reader.readAsDataURL(file);
     let send_body;
@@ -25,13 +25,13 @@ function change_profile_photo(file)
 				console.log(response.status);
 				if (response.status == 200)
 				{
-					document.getElementById("main-photo-current").setAttribute("src", "data:img/png;base64, " + send_body.photo_64);
-					document.getElementById("main-photo-warning").remove();
+					document.getElementById("main-data-photo-current").setAttribute("src", "data:img/png;base64, " + send_body.photo_64);
+					document.getElementById("main-data-photo-warning").remove();
 				}
 				else
 				{
-					document.getElementById("main-photo-warning").setAttribute("class", "warning");
-					document.getElementById("main-photo-warning").innerHTML = "Ошибка загрузки";
+					document.getElementById("main-data-photo-warning").setAttribute("class", "warning");
+					document.getElementById("main-data-photo-warning").innerHTML = "Ошибка загрузки";
 				}
 			});
         };
