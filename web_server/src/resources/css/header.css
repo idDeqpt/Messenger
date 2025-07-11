@@ -25,6 +25,7 @@ body {
 	border-right: 1px solid;
 	border-color: #DD9E1F;
 	font-size: 20px;
+	transition: background-color 0.15s;
 }
 
 .header button:last-child {
