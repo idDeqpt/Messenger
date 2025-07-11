@@ -7,7 +7,7 @@
 
 
 .main-header {
-	background-color: white;
+	background-color: #FFFCDD;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -101,16 +101,4 @@
 		margin-left: 5px;
 		margin-right: 5px;
 	}
-}
-
-.main-header-buttons button {
-	background-color: #FFD98C;
-	border: 2px solid;
-	border-color: #DD9E1F;
-	border-radius: 50px;
-	transition: background-color 0.15s;
-}
-
-.main-header-buttons button:hover {
-	background-color: #F3E1BC;
 }
