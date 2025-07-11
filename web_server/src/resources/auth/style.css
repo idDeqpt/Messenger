@@ -68,7 +68,8 @@ a {
 }
 
 .main-table-buttons button:hover {
-	background-color: #E5D8BE;
+	background-color: #F3E1BC;
+	transition: background-color 0.15s;
 }
 
 .warning {
