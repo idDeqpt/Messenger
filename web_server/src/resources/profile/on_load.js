@@ -3,7 +3,7 @@ let token_payload = localStorage.getItem("access_token").split(".")[1];
 let self_page = params.get("id") == null;
 let user_id = (self_page) ? JSON.parse(atob(token_payload))["id"] : params.get("id");
 if (self_page)
-	document.getElementById("main-header").innerHTML += "<div><button onclick=\"window.location.assign('/profile/params' + document.location.search);\"><a>Параметры</a></button></div>";
+	document.getElementById("main-header").innerHTML += "<div class=\"main-header-buttons\"><button onclick=\"window.location.assign('/profile/params' + document.location.search);\"><a>Параметры</a></button></div>";
 
 check_token("http://" + api_host + "/get_profile_data?id=" + user_id, {method: "GET"}, function(response){
 	response.json().then(data => {
