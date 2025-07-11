@@ -15,7 +15,6 @@
 	padding: 5px;
 
 	width: 70%;
-	border-top: 2px solid;
 	border-bottom: 2px solid;
 
 	@media (max-aspect-ratio: 1/1) {
