@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="/js/check_token.js"></script>
 
 		<link rel="stylesheet" href="/css/header.css">
+		<link rel="stylesheet" href="/css/custom_button.css">
 		<link rel="stylesheet" href="chat/style.css">
 		<script type="text/javascript" src="/js/display_header.js"></script>
 		<script type="text/javascript" src="/js/exit.js"></script>
@@ -23,15 +24,16 @@
 
 		<div class="main">
 			<div id="main-header" class="main-header">
-				<button onclick="window.location.assign('/chats')">Назад</button>
+				<button class="custom-button" onclick="window.location.assign('/chats')">Назад</button>
 				<div><a id="main-header-chatname"></a></div>
+				<button id="main-header-params" class="custom-button"><a>Параметры</a></button>
 			</div>
 
 			<div id="messages-table" class="main-messages" data-scrollbar="cropped"></div>
 
-			<div class="main_footer">
-				<input type="text" id="message-text">
-				<button type="text" onclick="send_message();"><a>Отправить</a></button>
+			<div class="main-footer">
+				<div class="main-footer-input"><input type="text" id="message-text"></div>
+				<button class="custom-button" type="text" onclick="send_message();"><a>Отправить</a></button>
 			</div>
 		</div>
 

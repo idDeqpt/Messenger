@@ -18,7 +18,7 @@ async function messages_handler()
 			let user = users.find(obj => (obj.id == data.messages[i].user_id));
 			messages_table.innerHTML += "\
 				<div class=\"main-message\">\
-					<img class=\"main-message-photo\" alt=\"Profile photo\" src=\"data:img/png;base64, " + user.profile_photo_64 + "\">\
+					<div class=\"main-message-photo\"><img alt=\"Profile photo\" src=\"data:img/png;base64, " + user.profile_photo_64 + "\"></div>\
 					<div class=\"main-message-text\">\
 						<div class=\"main-message-text-username\">\
 							<a class=\"main-message-text-username-value\" href=\"/profile?id=" + user.id + "\">" + user.username + "</a>\
@@ -44,7 +44,6 @@ check_token("http://" + api_host + "/get_chat_data" + document.location.search, 
 	setInterval(async ()=>{await messages_handler();}, 2000);
 
 	document.getElementById("main-header-chatname").innerHTML += data.name;
-	document.getElementById("main-header").innerHTML += (data.type == "group") ? "\
-	<div><button onclick=\"window.location.assign('/chat/params" + document.location.search + "');\"><a>Параметры</a></button></div>\
-	" : "";
+	if (data.type == "group")
+		document.getElementById("main-header-params").setAttribute("onclick", "window.location.assign('/chat/params" + document.location.search + "');");
 });
