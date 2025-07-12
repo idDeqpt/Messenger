@@ -86,6 +86,11 @@ int main()
         {ServerStates::EXIT, "Exit"}
     };
 
+    std::string session_data_types[] = {
+        "Request",
+        "Response"
+    };
+
     net::HTTPServer server;
     server.setRequestHandler(http_handler);
 
@@ -143,17 +148,11 @@ int main()
             {
                 if (server.hasNewSessionData())
                 {
-                    net::ServerSessionData session = server.getNextSessionData();
-                    std::cout << "Request index: " << session.getId() << "\n"
-                    << "REQUEST:\n"
-                    << session.getRequest() << "\n"
-                    << "RESPONSE:\n"
-                    << session.getResponse() << "\n"
-                    << "============================\n"
-                    << "Press Space for stop...\n\n";
+                    net::ServerSessionData session_data = server.getNextSessionData();
+                    std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
+                    << session_data.getText() << std::endl
+                    << "========================================================\n\n";
                 }
-                //if (GetAsyncKeyState(VK_SPACE) < 0)
-                    //state = ServerStates::PAUSE;
                 timer.sleep(16);
             } break;
 
