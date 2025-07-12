@@ -1,9 +1,11 @@
-var messages_count = 0;
+var last_message_id = -1;
 var users;
 
 async function messages_handler()
 {
-	await check_token("http://" + api_host + "/get_chat_messages" + document.location.search, {method: "GET"}, async function(response){
+	const url_params = new URLSearchParams(document.location.search);
+	let params = "?chat_id=" + url_params.get("id") + "&message_id=" + last_message_id + "&count=all";
+	await check_token("http://" + api_host + "/get_messages_after" + params	, {method: "GET"}, async function(response){
 		let data = await response.json();
 		if (data.messages == null) return;
 
@@ -13,7 +15,7 @@ async function messages_handler()
 		if ((messages_table.scrollTop + messages_table.clientHeight + 5) >= messages_table.scrollHeight)
 			can_scroll = true;
 
-		for (let i = messages_count; i < data.messages.length; i++)
+		for (let i = 0; i < data.messages.length; i++)
 		{
 			let user = users.find(obj => (obj.id == data.messages[i].user_id));
 			messages_table.innerHTML += "\
@@ -30,7 +32,7 @@ async function messages_handler()
 					<br>\
 				</div>";
 		}
-		messages_count = data.messages.length;
+		last_message_id = data.messages[data.messages.length - 1].id;
 		if (can_scroll)
   			messages_table.scrollTop = messages_table.scrollHeight;
 	});

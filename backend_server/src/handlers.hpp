@@ -22,6 +22,7 @@
 #include "request_handlers/get_profile_data_handler.hpp"
 #include "request_handlers/change_profile_photo_handler.hpp"
 #include "request_handlers/change_description_handler.hpp"
+#include "request_handlers/get_messages_after_handler.hpp"
 
 
 void addHandlers(net::HTTPServer& server)
@@ -41,7 +42,8 @@ void addHandlers(net::HTTPServer& server)
 		std::make_pair("/create_chat", handlers::create_chat),
 		std::make_pair("/get_profile_data", handlers::get_profile_data),
 		std::make_pair("/change_profile_photo", handlers::change_profile_photo),
-		std::make_pair("/change_description", handlers::change_description)
+		std::make_pair("/change_description", handlers::change_description),
+		std::make_pair("/get_messages_after", handlers::get_messages_after)
 	};
 
 	for (unsigned int i = 0; i < handlers.size(); i++)
