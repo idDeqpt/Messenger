@@ -55,11 +55,11 @@ std::unique_ptr<std::string> load_file_data_ptr(std::string path)
 }
 
 
-std::string http_handler(net::TCPServer* server, std::string request)
+void http_handler(net::TCPServer* server, int client_socket)
 {
 	net::HTTPServer* http_server = dynamic_cast<net::HTTPServer*>(server);
 	net::HTTPResponse response;
-	net::HTTPRequest req(request);
+	net::HTTPRequest req(server->recv(client_socket));
 	net::URI uri(req.start_line[1]);
 	std::string path = uri.toString(false);
 
@@ -68,7 +68,10 @@ std::string http_handler(net::TCPServer* server, std::string request)
 
 	std::unique_ptr<std::string> data_ptr = load_file_data_ptr(work_directory + "resources" + path);
 	if (data_ptr == nullptr)
-		return http_server->get404Handler()().toString();
+	{
+		server->send(client_socket, http_server->get404Handler()().toString());
+		return;
+	}
 
 	response.body = *data_ptr;
 	response.start_line[0] = "HTTP/1.1";
@@ -78,7 +81,7 @@ std::string http_handler(net::TCPServer* server, std::string request)
 	response.headers["Content-Type"] = get_content_type(path) + "; charset=utf-8";
 	response.headers["Content-Length"] = std::to_string(response.body.length());
 
-	return response.toString();
+	server->send(client_socket, response.toString());
 }
 
 
@@ -130,7 +133,7 @@ int main(int argc, char* argv[])
 	{
 		if (server.hasNewSessionData())
 		{
-			static constexpr char* session_data_types[] = {"Request", "Response"};
+			static constexpr char* session_data_types[] = {"Open", "Close", "RECV", "Send"};
 			net::ServerSessionData session_data = server.getNextSessionData();
 			std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
 			<< session_data.getText() << std::endl
