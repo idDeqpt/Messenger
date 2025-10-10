@@ -29,7 +29,7 @@ namespace db
 	{
 	    sqlite3 *db;
 	    char *errMessage = 0;
-	    int exit = sqlite3_open("resources/database.db", &db);
+	    int exit = sqlite3_open((work_directory + "resources/database.db").c_str(), &db); //global var, need fix
 	    DataBuffer result;
 
 	    sqlite3_exec(db, request.c_str(), db::callback, (void*)&result, &errMessage);

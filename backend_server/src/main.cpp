@@ -6,117 +6,77 @@
 #include "Network/ServerSessionData.hpp"
 #include "Network/Timer.hpp"
 
+#ifdef _WIN32
+	#define WIN(exp) exp
+	#define NIX(exp)
+#else
+	#define WIN(exp)
+	#define NIX(exp) exp
+#endif
+
+std::string work_directory = "";
+
 #include "handlers.hpp"
 
 
-int main()
+int main(int argc, char* argv[])
 {
-    enum ServerStates
-    {
-        CHOOSE_STATE = 0,
-        INIT,
-        EXIT,
-        PROCESS,
-        PAUSE,
-    } state = ServerStates::CHOOSE_STATE;
+	std::string path = argv[0];
+	int last_slash = path.rfind(
+		WIN("\\")
+		NIX("/")
+	);
+	work_directory = path.substr(0, last_slash + 1);
 
-    std::vector<std::pair<ServerStates, std::string>> menu_selection_variants = {
-        {ServerStates::INIT, "Start"},
-        {ServerStates::EXIT, "Exit"}
-    };
+	int port = -1;
+	if (argc > 1)
+		try
+		{
+			port = std::stoi(std::string(argv[1]));
+			std::cout << "Port: " << port << std::endl;
+		} catch(...) {}
 
-    std::string session_data_types[] = {
-        "Request",
-        "Response"
-    };
+	while (port < 0)
+	{
+		std::cout << "Enter the port: ";
+		std::string port_s;
+		std::cin >> port_s;
+		try
+		{
+			port = std::stoi(port_s);
+		}
+		catch(...)
+		{
+			std::cout << "Unexpected character!" << std::endl;
+		}
+	}
 
-    net::HTTPServer server;
-    addHandlers(server);
+	net::HTTPServer server;
+	addHandlers(server);
 
-    Timer timer;
-    while (state != ServerStates::EXIT)
-    {
-        switch(state)
-        {
-            case ServerStates::CHOOSE_STATE:
-            {
-                std::cout << "Choise action:\n";
-                for (unsigned int i = 0; i < menu_selection_variants.size(); i++)
-                    std::cout << "\t" << i + 1 << ". " + menu_selection_variants[i].second + ";\n";
-                std::cout << "Enter: ";
+	int init_status = server.init(port);
+	if (!server.start())
+	{
+		std::cout << "Server start incompleted with code " << init_status << std::endl;
 
-                std::string action_str;
-                std::cin >> action_str;
-                std::cout << std::endl;
+		system("pause");
+		return 0;
+	}
+	std::cout << "Server start completed\n------------------------------------------------------------------------------------------\n";
 
-                try
-                {
-                    int action = stoi(action_str) - 1;
-                    if ((action >= 0) && (action < menu_selection_variants.size()))
-                        state = menu_selection_variants[action].first;
-                    else
-                        std::cout << "Incorrect value!\n";
-                }
-                catch(...)
-                {
-                    std::cout << "Incorrect value!\n";
-                }
-            } break;
-
-            case ServerStates::INIT:
-            {
-                std::string port;
-                std::cout << "Enter the port: ";
-                std::cin >> port;
-                int init_status = server.init(stoi(port));
-
-                if (server.start())
-                    std::cout << "Server start completed" << std::endl;
-                else
-                    std::cout << "Server start incompleted: " << init_status << std::endl;
-
-                state = ServerStates::PROCESS;
-            } break;
-
-            case ServerStates::EXIT:
-            {
-                std::cout << "exit\n";
-            } break;
-
-            case ServerStates::PROCESS:
-            {
-                if (server.hasNewSessionData())
-                {
-                    net::ServerSessionData session_data = server.getNextSessionData();
-                    std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
-                    << session_data.getText() << std::endl
-                    << "========================================================\n\n";
-                }
-                timer.sleep(16);
-            } break;
-
-            case ServerStates::PAUSE:
-            {
-                server.stop();
-                std::string command;
-                std::cout << "For continue enter \"1\", для выхода любое другое значение: ";
-                std::cin >> command;
-
-                if (command == "1")
-                {
-                    server.start();
-                    state = ServerStates::PROCESS;
-                }
-                else
-                    state = ServerStates::EXIT;
-            } break;
-
-            default:
-            {
-                state = ServerStates::CHOOSE_STATE;
-            } break;
-        }
-    }
+	Timer timer;
+	while (true)
+	{
+		if (server.hasNewSessionData())
+		{
+			static constexpr char* session_data_types[] = {"Request", "Response"};
+			net::ServerSessionData session_data = server.getNextSessionData();
+			std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
+			<< session_data.getText() << std::endl
+			<< "==========================================================================================\n";
+		}
+		timer.sleep(16);
+	}
 
 	system("pause");
 	return 0;
