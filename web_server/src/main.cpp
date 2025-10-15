@@ -10,7 +10,7 @@
 
 #include "Network/URL.hpp"
 #include "Network/HTTP.hpp"
-#include "Network/HTTPServer.hpp"
+#include "Network/TCPServer.hpp"
 #include "Network/ServerSessionData.hpp"
 #include "Network/Timer.hpp"
 
@@ -41,7 +41,7 @@ std::string get_content_type(std::string path)
 }
 
 
-std::unique_ptr<std::string> load_file_data_ptr(std::string path)
+std::unique_ptr<std::string> load_file_data_ptr(const std::string& path)
 {
 	std::ifstream file(path, std::ios::binary);
 
@@ -55,9 +55,8 @@ std::unique_ptr<std::string> load_file_data_ptr(std::string path)
 }
 
 
-void http_handler(net::TCPServer* server, int client_socket)
+void request_handler(net::TCPServer* server, int client_socket)
 {
-	net::HTTPServer* http_server = dynamic_cast<net::HTTPServer*>(server);
 	net::HTTPResponse response;
 	net::HTTPRequest req(server->recv(client_socket));
 	net::URI uri(req.start_line[1]);
@@ -69,14 +68,19 @@ void http_handler(net::TCPServer* server, int client_socket)
 	std::unique_ptr<std::string> data_ptr = load_file_data_ptr(work_directory + "resources" + path);
 	if (data_ptr == nullptr)
 	{
-		server->send(client_socket, http_server->get404Handler()().toString());
-		return;
+		response.start_line[1] = "404";
+		response.start_line[2] = "NOT FOUND";
+		data_ptr = load_file_data_ptr(work_directory + "resources/404/index.html");
+	}
+	else
+	{
+		response.start_line[1] = "200";
+		response.start_line[2] = "OK";
 	}
 
 	response.body = *data_ptr;
 	response.start_line[0] = "HTTP/1.1";
-	response.start_line[1] = "200";
-	response.start_line[2] = "OK";
+	
 	response.headers["Version"] = "HTTP/1.1";
 	response.headers["Content-Type"] = get_content_type(path) + "; charset=utf-8";
 	response.headers["Content-Length"] = std::to_string(response.body.length());
@@ -117,8 +121,8 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	net::HTTPServer server;
-	server.setRequestHandler(http_handler);
+	net::TCPServer server;
+	server.setRequestHandler(request_handler);
 	int init_status = server.init(port);
 
 	if (!server.start())
