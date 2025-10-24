@@ -1,5 +1,5 @@
-#ifndef GET_USERNAME_HANDLER_HPP
-#define GET_USERNAME_HANDLER_HPP
+#ifndef SEND_MESSAGE_HTTP_HANDLER_HPP
+#define SEND_MESSAGE_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -12,15 +12,14 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
-    net::HTTPResponse get_username(net::HTTPRequest request)
+    net::HTTPResponse send_message(net::HTTPRequest request)
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
-        bool unauthorized = false;
 
-    	if (request.start_line[0] == "GET")
+    	if (request.start_line[0] == "POST")
         {
             std::string token = request.headers["Authorization"];
             if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
@@ -31,30 +30,26 @@ namespace handlers
             else
             {
                 std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
-                std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
-                std::shared_ptr<db::DataBuffer> result = db::exec("SELECT username FROM users WHERE id = " + id + ";");
+                std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
                 
-                if (result->size() != 1)
-                {
-                    response.start_line[1] = "409";
-                    response.start_line[2] = "CONFLICT";
-                }
-                else
-                {
-                    jst::JSObject json;
-                    json.addField("username", std::make_shared<jst::JSString>(result->back()["username"]));
-
-                    response.start_line[1] = "200";
-                    response.start_line[2] = "OK";
-                    response.body = json.toString();
-                }
+                jst::JSON parser;
+                parser.parse(request.body);
+                std::shared_ptr<jst::JSObject> request_data = std::static_pointer_cast<jst::JSObject>(parser.getParseResult());
+                
+                db::exec("INSERT INTO messages (chat_id, user_id, text)\
+                          VALUES (" + request_data->operator[]("chat_id")->toString() + ", " + 
+                                      user_id + ", " + 
+                                      request_data->operator[]("text")->toString() + ");");
+                
+                response.start_line[1] = "200";
+                response.start_line[2] = "OK";
             }
         }
         else if (request.start_line[0] == "OPTIONS")
         {
             response.start_line[1] = "200";
             response.start_line[2] = "OK";
-            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,GET";
+            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,POST";
             response.headers["Access-Control-Allow-Headers"] = "Authorization";
         }
         else
@@ -72,4 +67,4 @@ namespace handlers
     }
 }
 
-#endif //GET_USERNAME_HANDLER_HPP
+#endif //SEND_MESSAGE_HTTP_HANDLER_HPP

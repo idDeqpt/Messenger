@@ -1,5 +1,5 @@
-#ifndef UPDATE_TOKEN_HANDLER_HPP
-#define UPDATE_TOKEN_HANDLER_HPP
+#ifndef UPDATE_TOKEN_HTTP_HANDLER_HPP
+#define UPDATE_TOKEN_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -11,7 +11,7 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
     net::HTTPResponse update_token(net::HTTPRequest request)
     {
@@ -79,4 +79,4 @@ namespace handlers
     }
 }
 
-#endif //UPDATE_TOKEN_HANDLER_HPP
+#endif //UPDATE_TOKEN_HTTP_HANDLER_HPP

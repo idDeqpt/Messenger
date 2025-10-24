@@ -1,5 +1,5 @@
-#ifndef CREATE_CHAT_HANDLER_HPP
-#define CREATE_CHAT_HANDLER_HPP
+#ifndef ADD_MEMBER_TO_CHAT_HTTP_HANDLER_HPP
+#define ADD_MEMBER_TO_CHAT_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -12,9 +12,9 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
-    net::HTTPResponse create_chat(net::HTTPRequest request)
+    net::HTTPResponse add_member_to_chat(net::HTTPRequest request)
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
@@ -35,34 +35,40 @@ namespace handlers
                 jst::JSON parser;
                 parser.parse(request.body);
                 std::shared_ptr<jst::JSObject> request_data = std::static_pointer_cast<jst::JSObject>(parser.getParseResult());
-                std::string chat_type = std::static_pointer_cast<jst::JSString>(request_data->operator[]("type"))->getString();
-                std::string chat_name = std::static_pointer_cast<jst::JSString>(request_data->operator[]("name"))->getString();
+                std::string chat_id = request_data->operator[]("chat_id")->toString();
 
-                std::shared_ptr<db::DataBuffer> result_not_found = db::exec("SELECT id FROM users WHERE username = \"" + chat_name + "\";");
-                if ((chat_type == "user") && (result_not_found->size() == 0))
+                std::shared_ptr<db::DataBuffer> result_forbidden = db::exec("SELECT * FROM chat_members WHERE chat_id = " + chat_id + " AND user_id = " + user_id + ";");
+                
+                if (result_forbidden->size() == 0)
                 {
-                    response.start_line[1] = "404";
-                    response.start_line[2] = "NOT FOUND";
+                    response.start_line[1] = "403";
+                    response.start_line[2] = "FORBIDDEN";
                 }
                 else
                 {
-                    std::shared_ptr<db::DataBuffer> result = db::exec("INSERT INTO chats (name, type)\
-                                                                       VALUES (\"" + chat_name + "\", \"" + chat_type + "\")\
-                                                                       RETURNING id;");
-                    db::exec("INSERT INTO chat_members (chat_id, user_id)\
-                              VALUES (" + result->back()["id"] + ", " + user_id + ");");
-                    if (chat_type == "user")
+                    std::shared_ptr<db::DataBuffer> result_not_found = db::exec("SELECT id FROM users WHERE username = " + request_data->operator[]("username")->toString() + ";");
+                    if (result_not_found->size() == 0)
                     {
-                        db::exec("INSERT INTO chat_members (chat_id, user_id)\
-                                  VALUES (" + result->back()["id"] + ", " + result_not_found->back()["id"] + ");");
+                        response.start_line[1] = "404";
+                        response.start_line[2] = "NOT FOUND";
                     }
-                    
-                    jst::JSObject json;
-                    json.addField("chat_id", std::make_shared<jst::JSNumber>(stoi(result->back()["id"])));
-
-                    response.start_line[1] = "200";
-                    response.start_line[2] = "OK";
-                    response.body = json.toString();
+                    else
+                    {
+                        std::shared_ptr<db::DataBuffer> result_conflict = db::exec("SELECT * FROM chat_members WHERE chat_id = " + chat_id + " AND user_id = " + result_not_found->at(0)["id"] + ";");
+                        if (result_conflict->size() > 0)
+                        {
+                            response.start_line[1] = "409";
+                            response.start_line[2] = "CONFLICT";
+                        }
+                        else
+                        {
+                            db::exec("INSERT INTO chat_members (chat_id, user_id)\
+                                      VALUES (" + chat_id + ", " + result_not_found->at(0)["id"] + ");");
+                            
+                            response.start_line[1] = "200";
+                            response.start_line[2] = "OK";
+                        }
+                    }
                 }
             }
         }
@@ -88,4 +94,4 @@ namespace handlers
     }
 }
 
-#endif //CREATE_CHAT_HANDLER_HPP
+#endif //ADD_MEMBER_TO_CHAT_HTTP_HANDLER_HPP

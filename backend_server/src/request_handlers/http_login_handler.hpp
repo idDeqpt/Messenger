@@ -1,5 +1,5 @@
-#ifndef LOGIN_HANDLER_HPP
-#define LOGIN_HANDLER_HPP
+#ifndef LOGIN_HTTP_HANDLER_HPP
+#define LOGIN_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -9,7 +9,7 @@
 #include "tools/database.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
     net::HTTPResponse login(net::HTTPRequest request)
     {
@@ -57,4 +57,4 @@ namespace handlers
     }
 }
 
-#endif //LOGIN_HANDLER_HPP
+#endif //LOGIN_HTTP_HANDLER_HPP

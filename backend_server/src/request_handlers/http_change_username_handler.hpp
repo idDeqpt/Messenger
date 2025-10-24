@@ -1,5 +1,5 @@
-#ifndef SEND_MESSAGE_HANDLER_HPP
-#define SEND_MESSAGE_HANDLER_HPP
+#ifndef CHANGE_USERNAME_HTTP_HANDLER_HPP
+#define CHANGE_USERNAME_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -9,18 +9,20 @@
 #include <memory>
 
 #include "tools/database.hpp"
+#include "tools/base64.hpp"
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
-    net::HTTPResponse send_message(net::HTTPRequest request)
+    net::HTTPResponse change_username(net::HTTPRequest request)
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
 
     	if (request.start_line[0] == "POST")
         {
+
             std::string token = request.headers["Authorization"];
             if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
             {
@@ -29,20 +31,23 @@ namespace handlers
             }
             else
             {
-                std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
-                std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
+                std::string new_username = Base64::decode(uri.getParamsPtr()["username_64"]);
+                std::shared_ptr<db::DataBuffer> result = db::exec("SELECT id FROM users WHERE username = \"" + new_username + "\";");
                 
-                jst::JSON parser;
-                parser.parse(request.body);
-                std::shared_ptr<jst::JSObject> request_data = std::static_pointer_cast<jst::JSObject>(parser.getParseResult());
-                
-                db::exec("INSERT INTO messages (chat_id, user_id, text)\
-                          VALUES (" + request_data->operator[]("chat_id")->toString() + ", " + 
-                                      user_id + ", " + 
-                                      request_data->operator[]("text")->toString() + ");");
-                
-                response.start_line[1] = "200";
-                response.start_line[2] = "OK";
+                if (result->size() > 0)
+                {
+                    response.start_line[1] = "409";
+                    response.start_line[2] = "CONFLICT";
+                }
+                else
+                {
+                    std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
+                    std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
+                    db::exec("UPDATE users SET username = \"" + new_username + "\" WHERE id = " + id + ";");
+
+                    response.start_line[1] = "200";
+                    response.start_line[2] = "OK";
+                }
             }
         }
         else if (request.start_line[0] == "OPTIONS")
@@ -67,4 +72,4 @@ namespace handlers
     }
 }
 
-#endif //SEND_MESSAGE_HANDLER_HPP
+#endif //CHANGE_USERNAME_HTTP_HANDLER_HPP

@@ -1,5 +1,5 @@
-#ifndef CHANGE_DESCRIPTION_HANDLER_HPP
-#define CHANGE_DESCRIPTION_HANDLER_HPP
+#ifndef CHANGE_DESCRIPTION_HTTP_HANDLER_HPP
+#define CHANGE_DESCRIPTION_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -13,7 +13,7 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
     net::HTTPResponse change_description(net::HTTPRequest request)
     {
@@ -63,4 +63,4 @@ namespace handlers
     }
 }
 
-#endif //CHANGE_DESCRIPTION_HANDLER_HPP
+#endif //CHANGE_DESCRIPTION_HTTP_HANDLER_HPP

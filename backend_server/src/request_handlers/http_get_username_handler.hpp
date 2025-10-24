@@ -1,27 +1,26 @@
-#ifndef CHANGE_PROFILE_PHOTO_HANDLER_HPP
-#define CHANGE_PROFILE_PHOTO_HANDLER_HPP
+#ifndef GET_USERNAME_HTTP_HANDLER_HPP
+#define GET_USERNAME_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
 #include <unordered_map>
 #include <utility>
-#include <fstream>
 #include <string>
 #include <memory>
 
 #include "tools/database.hpp"
-#include "tools/base64.hpp"
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
-    net::HTTPResponse change_profile_photo(net::HTTPRequest request)
+    net::HTTPResponse get_username(net::HTTPRequest request)
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
+        bool unauthorized = false;
 
-    	if (request.start_line[0] == "POST")
+    	if (request.start_line[0] == "GET")
         {
             std::string token = request.headers["Authorization"];
             if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
@@ -32,25 +31,30 @@ namespace handlers
             else
             {
                 std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
-                std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
-                jst::JSON parser;
-                parser.parse(request.body);
-                std::shared_ptr<jst::JSObject> request_data = std::static_pointer_cast<jst::JSObject>(parser.getParseResult());
+                std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
+                std::shared_ptr<db::DataBuffer> result = db::exec("SELECT username FROM users WHERE id = " + id + ";");
                 
-                std::ofstream file("resources/profile_photos/" + user_id + ".png", std::ios::binary);
-                file << Base64::decode(std::static_pointer_cast<jst::JSString>(request_data->operator[]("photo_64"))->getString());
-                file.close();
-                db::exec("UPDATE users SET has_profile_photo = 1 WHERE id = " + user_id);
+                if (result->size() != 1)
+                {
+                    response.start_line[1] = "409";
+                    response.start_line[2] = "CONFLICT";
+                }
+                else
+                {
+                    jst::JSObject json;
+                    json.addField("username", std::make_shared<jst::JSString>(result->back()["username"]));
 
-                response.start_line[1] = "200";
-                response.start_line[2] = "OK";
+                    response.start_line[1] = "200";
+                    response.start_line[2] = "OK";
+                    response.body = json.toString();
+                }
             }
         }
         else if (request.start_line[0] == "OPTIONS")
         {
             response.start_line[1] = "200";
             response.start_line[2] = "OK";
-            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,POST";
+            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,GET";
             response.headers["Access-Control-Allow-Headers"] = "Authorization";
         }
         else
@@ -68,4 +72,4 @@ namespace handlers
     }
 }
 
-#endif //CHANGE_PROFILE_PHOTO_HANDLER_HPP
+#endif //GET_USERNAME_HTTP_HANDLER_HPP

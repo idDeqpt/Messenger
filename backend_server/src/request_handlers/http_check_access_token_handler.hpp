@@ -1,5 +1,5 @@
-#ifndef CHECK_ACCESS_TOKEN_HANDLER_HPP
-#define CHECK_ACCESS_TOKEN_HANDLER_HPP
+#ifndef CHECK_ACCESS_TOKEN_HTTP_HANDLER_HPP
+#define CHECK_ACCESS_TOKEN_HTTP_HANDLER_HPP
 
 #include <Network/HTTP.hpp>
 #include <string>
@@ -7,7 +7,7 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
     net::HTTPResponse check_access_token(net::HTTPRequest request)
     {
@@ -49,4 +49,4 @@ namespace handlers
     }
 }
 
-#endif //CHECK_ACCESS_TOKEN_HANDLER_HPP
+#endif //CHECK_ACCESS_TOKEN_HTTP_HANDLER_HPP

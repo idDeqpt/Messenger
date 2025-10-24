@@ -1,10 +1,11 @@
-#ifndef CHANGE_USERNAME_HANDLER_HPP
-#define CHANGE_USERNAME_HANDLER_HPP
+#ifndef CHANGE_PROFILE_PHOTO_HTTP_HANDLER_HPP
+#define CHANGE_PROFILE_PHOTO_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
 #include <unordered_map>
 #include <utility>
+#include <fstream>
 #include <string>
 #include <memory>
 
@@ -13,16 +14,15 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
-    net::HTTPResponse change_username(net::HTTPRequest request)
+    net::HTTPResponse change_profile_photo(net::HTTPRequest request)
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
 
     	if (request.start_line[0] == "POST")
         {
-
             std::string token = request.headers["Authorization"];
             if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
             {
@@ -31,23 +31,19 @@ namespace handlers
             }
             else
             {
-                std::string new_username = Base64::decode(uri.getParamsPtr()["username_64"]);
-                std::shared_ptr<db::DataBuffer> result = db::exec("SELECT id FROM users WHERE username = \"" + new_username + "\";");
+                std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
+                std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
+                jst::JSON parser;
+                parser.parse(request.body);
+                std::shared_ptr<jst::JSObject> request_data = std::static_pointer_cast<jst::JSObject>(parser.getParseResult());
                 
-                if (result->size() > 0)
-                {
-                    response.start_line[1] = "409";
-                    response.start_line[2] = "CONFLICT";
-                }
-                else
-                {
-                    std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
-                    std::string id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
-                    db::exec("UPDATE users SET username = \"" + new_username + "\" WHERE id = " + id + ";");
+                std::ofstream file("resources/profile_photos/" + user_id + ".png", std::ios::binary);
+                file << Base64::decode(std::static_pointer_cast<jst::JSString>(request_data->operator[]("photo_64"))->getString());
+                file.close();
+                db::exec("UPDATE users SET has_profile_photo = 1 WHERE id = " + user_id);
 
-                    response.start_line[1] = "200";
-                    response.start_line[2] = "OK";
-                }
+                response.start_line[1] = "200";
+                response.start_line[2] = "OK";
             }
         }
         else if (request.start_line[0] == "OPTIONS")
@@ -72,4 +68,4 @@ namespace handlers
     }
 }
 
-#endif //CHANGE_USERNAME_HANDLER_HPP
+#endif //CHANGE_PROFILE_PHOTO_HTTP_HANDLER_HPP

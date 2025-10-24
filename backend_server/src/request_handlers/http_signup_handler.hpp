@@ -1,5 +1,5 @@
-#ifndef SIGNUP_HANDLER_HPP
-#define SIGNUP_HANDLER_HPP
+#ifndef SIGNUP_HTTP_HANDLER_HPP
+#define SIGNUP_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -12,7 +12,7 @@
 #include "tools/database.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
     net::HTTPResponse signup(net::HTTPRequest request)
     {
@@ -63,4 +63,4 @@ namespace handlers
     }
 }
 
-#endif //SIGNUP_HANDLER_HPP
+#endif //SIGNUP_HTTP_HANDLER_HPP

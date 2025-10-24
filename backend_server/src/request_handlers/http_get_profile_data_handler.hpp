@@ -1,24 +1,26 @@
-#ifndef GET_CHAT_MESSAGES_HANDLER_HPP
-#define GET_CHAT_MESSAGES_HANDLER_HPP
+#ifndef GET_PROFILE_DATA_HTTP_HANDLER_HPP
+#define GET_PROFILE_DATA_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
 #include <unordered_map>
+#include <fstream>
+#include <sstream>
 #include <utility>
 #include <string>
 #include <memory>
 
 #include "tools/database.hpp"
+#include "tools/base64.hpp"
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
-    net::HTTPResponse get_chat_messages(net::HTTPRequest request)
+    net::HTTPResponse get_profile_data(net::HTTPRequest request)
     {
         net::HTTPResponse response;
         net::URI uri(request.start_line[1]);
-        bool unauthorized = false;
 
     	if (request.start_line[0] == "GET")
         {
@@ -30,25 +32,28 @@ namespace handlers
             }
             else
             {
-                std::string chat_id = uri.getParamsPtr()["id"];
-                std::shared_ptr<db::DataBuffer> chat_messages_data = db::exec("SELECT id, user_id, text FROM messages WHERE chat_id = " + chat_id + ";");
+                std::string user_id = uri.getParamsPtr()["id"];
+                std::shared_ptr<db::DataBuffer> user_data = db::exec("SELECT username, description, has_profile_photo FROM users WHERE id = " + user_id + ";");
                 
-                jst::JSObject json;
-                json.addField("messages", std::make_shared<jst::JSArray>());
+                std::ifstream file;
+                if (user_data->back()["has_profile_photo"] == "1")
+                    file.open("resources/profile_photos/" + user_id + ".png", std::ios::binary);
+                else
+                    file.open("resources/profile_photos/default.png", std::ios::binary);
 
-                for (unsigned int i = 0; i < chat_messages_data->size(); i++)
-                {
-                    jst::JSObject message;
-                    message.addField("id", std::make_shared<jst::JSNumber>(stoi(chat_messages_data->at(i)["id"])));
-                    message.addField("user_id", std::make_shared<jst::JSNumber>(stoi(chat_messages_data->at(i)["user_id"])));
-                    message.addField("text", std::make_shared<jst::JSString>(chat_messages_data->at(i)["text"]));
-                    std::static_pointer_cast<jst::JSArray>(json["messages"])->pushBack(std::make_shared<jst::JSObject>(message));
-                }
+                std::ostringstream oss;
+                oss << file.rdbuf();
+                file.close();
+
+                jst::JSObject user_json;
+                user_json.addField("username", std::make_shared<jst::JSString>(user_data->back()["username"]));
+                user_json.addField("description", std::make_shared<jst::JSString>(user_data->back()["description"]));
+                user_json.addField("profile_photo_64", std::make_shared<jst::JSString>(Base64::encode(oss.str())));
 
                 response.start_line[1] = "200";
                 response.start_line[2] = "OK";
                 response.headers["Content-Type"] = "application/json";
-                response.body = json.toString();
+                response.body = user_json.toString();
             }
         }
         else if (request.start_line[0] == "OPTIONS")
@@ -73,4 +78,4 @@ namespace handlers
     }
 }
 
-#endif //GET_CHAT_MESSAGES_HANDLER_HPP
+#endif //GET_PROFILE_DATA_HTTP_HANDLER_HPP

@@ -1,5 +1,5 @@
-#ifndef GET_USER_CHATS_HANDLER_HPP
-#define GET_USER_CHATS_HANDLER_HPP
+#ifndef GET_USER_CHATS_HTTP_HANDLER_HPP
+#define GET_USER_CHATS_HTTP_HANDLER_HPP
 
 #include <JSTypes/JSTypes.hpp>
 #include <Network/HTTP.hpp>
@@ -12,7 +12,7 @@
 #include "tools/jwt.hpp"
 
 
-namespace handlers
+namespace handlers::http
 {
     net::HTTPResponse get_user_chats(net::HTTPRequest request)
     {
@@ -95,4 +95,4 @@ namespace handlers
     }
 }
 
-#endif //GET_USER_CHATS_HANDLER_HPP
+#endif //GET_USER_CHATS_HTTP_HANDLER_HPP

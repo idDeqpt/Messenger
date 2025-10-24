@@ -2,7 +2,7 @@
 #include <string>
 #include <utility>
 
-#include "Network/HTTPServer.hpp"
+#include "Network/TCPServer.hpp"
 #include "Network/ServerSessionData.hpp"
 #include "Network/Timer.hpp"
 
@@ -16,7 +16,7 @@
 
 std::string work_directory = "";
 
-#include "handlers.hpp"
+#include "request_handlers/main_request_handler.hpp"
 
 
 int main(int argc, char* argv[])
@@ -51,8 +51,8 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	net::HTTPServer server;
-	addHandlers(server);
+	net::TCPServer server;
+	server.setRequestHandler(request_handler);
 
 	int init_status = server.init(port);
 	if (!server.start())
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 	{
 		if (server.hasNewSessionData())
 		{
-			static constexpr char* session_data_types[] = {"Request", "Response"};
+			static constexpr char* session_data_types[] = {"Open", "Close", "RECV", "Send"};
 			net::ServerSessionData session_data = server.getNextSessionData();
 			std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
 			<< session_data.getText() << std::endl
