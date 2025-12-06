@@ -8,11 +8,11 @@
 #include <string>
 #include <vector>
 
-#include "tools/work_directory.hpp"
-
 namespace db
 {
 	typedef std::vector<std::unordered_map<std::string, std::string>> DataBuffer;
+
+	std::string work_directory = "";
 
 	static int callback(void* data, int argc, char** argv, char** azColName) 
 	{

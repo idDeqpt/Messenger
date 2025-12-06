@@ -1,11 +1,10 @@
 #include <iostream>
-#include <string>
 #include <utility>
+#include <string>
 
 #include <Network/TCPServer.hpp>
 #include <Network/ServerSessionData.hpp>
 #include <Network/Timer.hpp>
-#include "request_handlers/tools/work_directory.hpp"
 
 #ifdef _WIN32
 	#define WIN(exp) exp
@@ -16,6 +15,7 @@
 #endif
 
 #include "request_handlers/main_request_handler.hpp"
+#include "request_handlers/tools/database.hpp"
 
 
 int main(int argc, char* argv[])
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 		WIN("\\")
 		NIX("/")
 	);
-	work_directory = path.substr(0, last_slash + 1);
+	db::work_directory = path.substr(0, last_slash + 1);
 
 	int port = -1;
 	if (argc > 1)

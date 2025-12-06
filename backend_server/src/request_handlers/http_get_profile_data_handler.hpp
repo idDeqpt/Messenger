@@ -10,7 +10,6 @@
 #include <string>
 #include <memory>
 
-#include "tools/work_directory.hpp"
 #include "tools/database.hpp"
 #include "tools/base64.hpp"
 #include "tools/jwt.hpp"
@@ -38,9 +37,9 @@ namespace handlers::http
 				
 				std::ifstream file;
 				if (user_data->back()["has_profile_photo"] == "1")
-					file.open(work_directory + "resources/profile_photos/" + user_id + ".png", std::ios::binary);
+					file.open(db::work_directory + "resources/profile_photos/" + user_id + ".png", std::ios::binary);
 				else
-					file.open(work_directory + "resources/profile_photos/default.png", std::ios::binary);
+					file.open(db::work_directory + "resources/profile_photos/default.png", std::ios::binary);
 
 				std::ostringstream oss;
 				oss << file.rdbuf();
