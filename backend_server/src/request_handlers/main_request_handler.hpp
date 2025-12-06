@@ -79,7 +79,7 @@ void request_handler(net::TCPServer* server, int client_socket)
 			net::HTTPResponse response;
 			response.start_line[0] = "HTTP/1.1";
 			response.start_line[1] = "101";
-			response.start_line[2] = "SWITCHING PROTOCOLS";
+			response.start_line[2] = "Switching Protocols";
 			response.headers["Upgrade"] = "websocket";
 			response.headers["Connection"] = "Upgrade";
 			response.headers["Sec-WebSocket-Accept"] = Base64::encode(binary_data);

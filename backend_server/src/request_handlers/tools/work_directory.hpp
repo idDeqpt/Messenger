@@ -1,0 +1,6 @@
+#ifndef WORK_DIRECTORY_SINGLETONE
+#define WORK_DIRECTORY_SINGLETONE
+
+std::string work_directory = "";
+
+#endif //WORK_DIRECTORY_SINGLETONE

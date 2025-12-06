@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "tools/work_directory.hpp"
 
 namespace db
 {

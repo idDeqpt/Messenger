@@ -2,9 +2,10 @@
 #include <string>
 #include <utility>
 
-#include "Network/TCPServer.hpp"
-#include "Network/ServerSessionData.hpp"
-#include "Network/Timer.hpp"
+#include <Network/TCPServer.hpp>
+#include <Network/ServerSessionData.hpp>
+#include <Network/Timer.hpp>
+#include "request_handlers/tools/work_directory.hpp"
 
 #ifdef _WIN32
 	#define WIN(exp) exp
@@ -13,8 +14,6 @@
 	#define WIN(exp)
 	#define NIX(exp) exp
 #endif
-
-std::string work_directory = "";
 
 #include "request_handlers/main_request_handler.hpp"
 
