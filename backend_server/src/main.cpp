@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 			<< session_data.getText() << std::endl
 			<< "==========================================================================================\n";
 		}
-		timer.sleep(16);
+		timer.sleep(100);
 	}
 
 	system("pause");
