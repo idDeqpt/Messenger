@@ -61,9 +61,9 @@ namespace handlers::http
 				{
 					std::ifstream file;
 					if (chat_members_data->at(i)["has_profile_photo"] == "1")
-						file.open("resources/profile_photos/" + chat_members_data->at(i)["user_id"] + ".png", std::ios::binary);
+						file.open(db::work_directory + "resources/profile_photos/" + chat_members_data->at(i)["user_id"] + ".png", std::ios::binary);
 					else
-						file.open("resources/profile_photos/default.png", std::ios::binary);
+						file.open(db::work_directory + "resources/profile_photos/default.png", std::ios::binary);
 					std::ostringstream photo_bin;
 					photo_bin << file.rdbuf();
 					file.close();
