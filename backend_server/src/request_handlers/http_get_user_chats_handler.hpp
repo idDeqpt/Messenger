@@ -14,85 +14,90 @@
 
 namespace handlers::http
 {
-    net::HTTPResponse get_user_chats(net::HTTPRequest request)
-    {
-        net::HTTPResponse response;
-        net::URI uri(request.start_line[1]);
-        bool unauthorized = false;
+	net::HTTPResponse get_user_chats(net::HTTPRequest request)
+	{
+		net::HTTPResponse response;
+		net::URI uri(request.start_line[1]);
+		bool unauthorized = false;
 
-    	if (request.start_line[0] == "GET")
-        {
-            std::string token = request.headers["Authorization"];
-            if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
-            {
-                response.start_line[1] = "401";
-                response.start_line[2] = "UNAUTHORIZED";
-            }
-            else
-            {
-                std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
-                std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
-                std::shared_ptr<db::DataBuffer> result = db::exec("SELECT chat_id FROM chat_members WHERE user_id = " + user_id + ";");
-                
-                jst::JSObject json;
-                json.addField("chats", std::make_shared<jst::JSArray>());
-                for (unsigned int i = 0; i < result->size(); i++)
-                {
-                    std::shared_ptr<db::DataBuffer> chat_data = db::exec("SELECT name, type FROM chats WHERE id = " + result->at(i)["chat_id"] + ";");
-                    if (chat_data->back()["type"] == "user")
-                    {
-                        std::shared_ptr<db::DataBuffer> user_data1 = db::exec("SELECT user_id FROM chat_members WHERE chat_id = " + result->at(i)["chat_id"] + ";");
-                        std::string id = (user_id == user_data1->at(0)["user_id"]) ? user_data1->at(1)["user_id"] : user_data1->at(0)["user_id"];
-                        std::shared_ptr<db::DataBuffer> name_data2 = db::exec("SELECT username FROM users WHERE id = " + id + ";");
-                        chat_data->back()["name"] = name_data2->back()["username"];
-                    }
+		if (request.start_line[0] == "GET")
+		{
+			std::string token = request.headers["Authorization"];
+			if (jwt::verifyToken(token) != jwt::TokenError::NO_ERROR)
+			{
+				response.start_line[1] = "401";
+				response.start_line[2] = "UNAUTHORIZED";
+			}
+			else
+			{
+				std::shared_ptr<jst::JSObject> payload_ptr = jwt::getPayload(token);
+				std::string user_id = std::static_pointer_cast<jst::JSString>(payload_ptr->operator[]("id"))->getString();
+				std::shared_ptr<db::DataBuffer> result = db::exec("SELECT chat_id FROM chat_members WHERE user_id = " + user_id + ";");
+				
+				jst::JSObject json;
+				json.addField("chats", std::make_shared<jst::JSArray>());
+				for (unsigned int i = 0; i < result->size(); i++)
+				{
+					std::shared_ptr<db::DataBuffer> chat_data = db::exec("SELECT name, type FROM chats WHERE id = " + result->at(i)["chat_id"] + ";");
+					if (chat_data->back()["type"] == "user")
+					{
+						std::shared_ptr<db::DataBuffer> user_data = db::exec("SELECT user_id FROM chat_members WHERE chat_id = " + result->at(i)["chat_id"] + ";");
+						if (user_data->size() > 1)
+						{
+							std::string id = (user_id == user_data->at(0)["user_id"]) ? user_data->at(1)["user_id"] : user_data->at(0)["user_id"];
+							std::shared_ptr<db::DataBuffer> name_data = db::exec("SELECT username FROM users WHERE id = " + id + ";");
+							chat_data->back()["name"] = name_data->back()["username"];
+						}
+						else
+							chat_data->back()["name"] = "Облако";
+					}
 
-                    std::shared_ptr<db::DataBuffer> last_message_data = db::exec("\
-                        SELECT users.username, messages.text\
-                        FROM users INNER JOIN messages\
-                        ON users.id = messages.user_id\
-                        WHERE messages.chat_id = " + result->at(i)["chat_id"] + " AND messages.id = (SELECT MAX(messages.id) FROM messages WHERE messages.chat_id = " + result->at(i)["chat_id"] + ");");
-                    jst::JSObject last_message;
-                    if (last_message_data->size() > 0)
-                    {
-                        last_message.addField("sender_username", std::make_shared<jst::JSString>(last_message_data->back()["username"]));
-                        last_message.addField("text", std::make_shared<jst::JSString>(last_message_data->back()["text"]));
-                    }
+					std::shared_ptr<db::DataBuffer> last_message_data = db::exec("\
+						SELECT users.username, messages.text\
+						FROM users INNER JOIN messages\
+						ON users.id = messages.user_id\
+						WHERE messages.chat_id = " + result->at(i)["chat_id"] + " AND messages.id = (SELECT MAX(messages.id) FROM messages WHERE messages.chat_id = " + result->at(i)["chat_id"] + ");");
+					jst::JSObject last_message;
+					if (last_message_data->size() > 0)
+					{
+						last_message.addField("sender_username", std::make_shared<jst::JSString>(last_message_data->back()["username"]));
+						last_message.addField("text", std::make_shared<jst::JSString>(last_message_data->back()["text"]));
+					}
 
-                    jst::JSObject chat_obj;
-                    chat_obj.addField("id", std::make_shared<jst::JSNumber>(stoi(result->at(i)["chat_id"])));
-                    chat_obj.addField("name", std::make_shared<jst::JSString>(chat_data->back()["name"]));
-                    chat_obj.addField("type", std::make_shared<jst::JSString>(chat_data->back()["type"]));
-                    chat_obj.addField("last_message", std::make_shared<jst::JSObject>(last_message));
-                    std::static_pointer_cast<jst::JSArray>(json["chats"])->pushBack(std::make_shared<jst::JSObject>(chat_obj));
-                }
+					jst::JSObject chat_obj;
+					chat_obj.addField("id", std::make_shared<jst::JSNumber>(stoi(result->at(i)["chat_id"])));
+					chat_obj.addField("name", std::make_shared<jst::JSString>(chat_data->back()["name"]));
+					chat_obj.addField("type", std::make_shared<jst::JSString>(chat_data->back()["type"]));
+					chat_obj.addField("last_message", std::make_shared<jst::JSObject>(last_message));
+					std::static_pointer_cast<jst::JSArray>(json["chats"])->pushBack(std::make_shared<jst::JSObject>(chat_obj));
+				}
 
-                response.start_line[1] = "200";
-                response.start_line[2] = "OK";
-                response.headers["Content-Type"] = "application/json";
-                response.body = json.toString();
-            }
-        }
-        else if (request.start_line[0] == "OPTIONS")
-        {
-            response.start_line[1] = "200";
-            response.start_line[2] = "OK";
-            response.headers["Access-Control-Allow-Methods"] = "OPTIONS,GET";
-            response.headers["Access-Control-Allow-Headers"] = "Authorization";
-        }
-        else
-        {
-            response.start_line[1] = "405";
-            response.start_line[2] = "METHOD NOT ALLOWED";
-        }
+				response.start_line[1] = "200";
+				response.start_line[2] = "OK";
+				response.headers["Content-Type"] = "application/json";
+				response.body = json.toString();
+			}
+		}
+		else if (request.start_line[0] == "OPTIONS")
+		{
+			response.start_line[1] = "200";
+			response.start_line[2] = "OK";
+			response.headers["Access-Control-Allow-Methods"] = "OPTIONS,GET";
+			response.headers["Access-Control-Allow-Headers"] = "Authorization";
+		}
+		else
+		{
+			response.start_line[1] = "405";
+			response.start_line[2] = "METHOD NOT ALLOWED";
+		}
 
-        response.start_line[0] = "HTTP/1.1";
-        response.headers["Version"] = "HTTP/1.1";
-        response.headers["Access-Control-Allow-Origin"] = "*";
-        response.headers["Content-Length"] = std::to_string(response.body.length());
+		response.start_line[0] = "HTTP/1.1";
+		response.headers["Version"] = "HTTP/1.1";
+		response.headers["Access-Control-Allow-Origin"] = "*";
+		response.headers["Content-Length"] = std::to_string(response.body.length());
 
-        return response;
-    }
+		return response;
+	}
 }
 
 #endif //GET_USER_CHATS_HTTP_HANDLER_HPP
