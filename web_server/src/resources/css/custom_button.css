@@ -4,6 +4,7 @@
 	border-color: #DD9E1F;
 	border-radius: 50px;
 	transition: background-color 0.15s;
+	font-family: inherit;
 }
 
 .custom-button:hover {

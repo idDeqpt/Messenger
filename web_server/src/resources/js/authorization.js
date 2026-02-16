@@ -1,10 +1,28 @@
+let has_warning = false;
+
+
+function create_warning_field(text)
+{
+	if (has_warning)
+	{
+		document.getElementById("warning-field").innerHTML = "<a class=\"warning\">" + text + "</a>";
+		return;
+	}
+	const el = document.createElement("div");
+	el.id = "warning-field";
+	el.innerHTML = "<a class=\"warning\">Необходимо заполнить все поля</a>";
+	document.getElementById("main").insertBefore(el, document.getElementById("buttons"));
+	has_warning = true;
+}
+
+
 function signup()
 {
 	let login_value = document.getElementById("login").value;
 	let password_value = document.getElementById("password").value;
 	if ((login_value == "") || (password_value == ""))
 	{
-		document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Необходимо заполнить все поля</a>";
+		create_warning_field("Необходимо заполнить все поля");
 		return;
 	}
 
@@ -26,7 +44,7 @@ function signup()
 			window.location.assign("/chats");
 		}
 		else
-			document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Пользователь с таким логином уже существует</a>";
+			create_warning_field("Пользователь с таким логином уже существует");
 	});
 }
 
@@ -36,7 +54,7 @@ function login()
 	let password_value = document.getElementById("password").value;
 	if ((login_value == "") || (password_value == ""))
 	{
-		document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Необходимо заполнить все поля</a>";
+		create_warning_field("Необходимо заполнить все поля");
 		return;
 	}
 
@@ -57,6 +75,6 @@ function login()
 			window.location.assign("/chats");
 		}
 		else
-			document.getElementById("warning-field").innerHTML = "<a class=\"warning\">Неправильный логин или пароль</a>";
+			create_warning_field("Неправильный логин или пароль");
 	});
 }

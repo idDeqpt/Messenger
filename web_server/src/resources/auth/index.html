@@ -4,37 +4,35 @@
 		<title>Авторизация</title>
 
 		<link rel="icon" href="favicon.png" type="image/x-icon">
+		
+		<link rel="stylesheet" href="/css/default_layout.css">
+
 		<link rel="stylesheet" href="auth/style.css">
 
 		<script type="text/javascript" src="/js/api_host.js"></script>
 		<script type="text/javascript" src="/js/authorization.js"></script>
-		
-		<link rel="stylesheet" href="/css/custom_button.css">
 	</head>
 	<body>
-		<div class="main">
-			<table class="main-table">
-				<tr>
-					<td colspan="2"><center><a>Регистрация/Вход</a></center></td>
-				</tr>
-				<tr>
-					<td><a>Логин</a></td>
-					<td><input type="text" id="login"></td>
-				</tr>
-				<tr>
-					<td><a>Пароль</a></td>
-					<td><input type="password" id="password"></td>
-				</tr>
-				<tr>
-					<td colspan="2" id="warning-field"></td>
-				</tr>
-				<tr>
-					<td colspan="2"><div class="main-table-buttons">
-						<button class="custom-button" onclick="signup();"><a>Зарегистрироваться</a></button>
-						<button class="custom-button" onclick="login();"><a>Войти</a></button>
-					</div></td>
-				</tr>
-			</table>
+		<div class="main" id="main">
+			<div class="main-header">
+				<a>Регистрация/Вход</a>
+			</div>
+
+			<div class="main-inputs">
+				<div>
+					<a>Логин</a>
+					<input type="text" id="login">
+				</div>
+				<div>
+					<a>Пароль</a>
+					<input type="password" id="password">
+				</div>
+			</div>
+
+			<div class="main-buttons" id="buttons">
+				<button class="custom-button" onclick="signup();"><a>Зарегистрироваться</a></button>
+				<button class="custom-button" onclick="login();"><a>Войти</a></button>
+			</div>
 		</div>
 	</body>
 </html>
