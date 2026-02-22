@@ -1,0 +1,29 @@
+.main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+
+.main-content {
+	background-color: #FFFCDD;
+
+	width: 70%;
+	border-bottom: 2px solid;
+
+	@media (max-aspect-ratio: 1/1) {
+		width: 100%;
+		flex-direction: column-reverse;
+		gap: 5px;
+	}
+
+	@media (min-aspect-ratio: 1/1) {
+		border-left: 2px solid;
+		border-right: 2px solid;
+		border-bottom-left-radius: 15px;
+		border-bottom-right-radius: 15px;
+	}
+	border-color: #DD9E1F;
+}
