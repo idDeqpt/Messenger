@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+		<title>Чаты</title>
+
+		<link rel="icon" href="/favicon.png" type="image/x-icon">
+		
+		<script type="text/javascript" src="/js/api_host.js"></script>
+		<script type="text/javascript" src="/js/update_token.js"></script>
+		<script type="text/javascript" src="/js/check_token.js"></script>
+
+		<link rel="stylesheet" href="/css/header.css">
+		<link rel="stylesheet" href="/css/custom_button.css">
+		<link rel="stylesheet" href="calls/style.css">
+
+		<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+		<script type="text/javascript" src="/js/display_header.js"></script>
+		<script type="text/javascript" src="/js/exit.js"></script>
+
+		<script type="text/javascript" src="calls/on_load.js"></script>
+	</head>
+	<body>
+		<div id="header" class="header"></div>
+		<script type="text/javascript">display_header("Чаты");</script>
+
+		<div class="main">
+			<div class="main-container">
+				<div id="join-screen" class="container-join">
+					<div>
+						<button class="custom-button" onclick="joinRoom()">Присоединиться по id</button>
+						<button class="custom-button" onclick="createRoom()">Создать новую комнату</button>
+					</div>
+					<input type="text" id="room-id" class="container-join-id" placeholder="Введите ID комнаты">
+				</div>
+				
+				<div id="conference-screen" style="display: none;">
+					<div id="video-grid"></div>
+					<div style="text-align: center; margin-top: 20px;">
+						<button onclick="toggleAudio()" id="audio-btn">Выключить звук</button>
+						<button onclick="toggleVideo()" id="video-btn">Выключить видео</button>
+						<button onclick="leaveRoom()" style="background: #e53e3e;">Покинуть</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
