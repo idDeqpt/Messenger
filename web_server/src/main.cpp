@@ -55,11 +55,11 @@ std::unique_ptr<std::string> load_file_data_ptr(const std::string& path)
 }
 
 
-void request_handler(net::TCPServer* server, int client_socket)
+std::string request_handler(std::string request_data)
 {
 	net::HTTPResponse response;
-	net::HTTPRequest req(server->recv(client_socket));
-	net::URI uri(req.start_line[1]);
+	net::HTTPRequest request(request_data);
+	net::URI uri(request.start_line[1]);
 	std::string path = uri.toString(false);
 
 	if (path.find(".") == std::string::npos)
@@ -85,7 +85,12 @@ void request_handler(net::TCPServer* server, int client_socket)
 	response.headers["Content-Type"] = get_content_type(path) + "; charset=utf-8";
 	response.headers["Content-Length"] = std::to_string(response.body.length());
 
-	server->send(client_socket, response.toString());
+	return response.toString();
+}
+
+void session_handler(net::TCPServer* server, int client_socket)
+{
+	server->send(client_socket, request_handler(server->recv(client_socket)));
 }
 
 
@@ -122,7 +127,7 @@ int main(int argc, char* argv[])
 	}
 
 	net::TCPServer server;
-	server.setRequestHandler(request_handler);
+	server.setRequestHandler(session_handler);
 	int init_status = server.init(port);
 
 	if (!server.start())
@@ -143,7 +148,7 @@ int main(int argc, char* argv[])
 			<< session_data.getText() << std::endl
 			<< "==========================================================================================\n";
 		}
-		timer.sleep(16);
+		timer.sleep(100);
 	}
 
 	system("pause");
