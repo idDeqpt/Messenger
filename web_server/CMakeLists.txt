@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5.0)
 
 set(PROJECT_NAME messenger_server)
 
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+
 project(${PROJECT_NAME} CXX)
 
 include(FetchContent)
@@ -11,9 +13,6 @@ FetchContent_Declare(
     GIT_REPOSITORY "https://github.com/idDeqpt/Network.git"
     GIT_TAG main
 )
-
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared library" FORCE)
-
 FetchContent_MakeAvailable(network)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
