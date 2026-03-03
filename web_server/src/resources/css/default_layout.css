@@ -18,21 +18,6 @@ body {
 }
 
 
-.custom-button {
-	background-color: #FFD98C;
-	border: 2px solid;
-	border-color: #DD9E1F;
-	border-radius: 1000px;
-	transition: background-color 0.15s;
-	font-family: inherit;
-	font-size: 0.7em;
-}
-
-.custom-button:hover {
-	background-color: #F3E1BC;
-}
-
-
 .warning {
 	color: red;
 }
@@ -68,4 +53,29 @@ body {
 
 .header button:hover {
 	background-color: #E5D8BE;
+}
+
+
+
+.custom-button {
+	background-color: #FFD98C;
+	border: 2px solid;
+	border-color: #DD9E1F;
+	border-radius: 1000px;
+	transition: background-color 0.15s;
+	font-family: inherit;
+	font-size: 0.7em;
+}
+
+.custom-button:hover {
+	background-color: #F3E1BC;
+}
+
+
+.custom-input {
+	border: none;
+	border: 2px solid;
+	border-color: #DD9E1F;
+	border-radius: 5px;
+	outline: none;
 }
