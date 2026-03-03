@@ -73,6 +73,7 @@ body {
 
 
 .custom-input {
+	height: 1.5em;
 	border: none;
 	border: 2px solid;
 	border-color: #DD9E1F;
