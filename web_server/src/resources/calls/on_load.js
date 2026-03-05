@@ -39,7 +39,7 @@ async function joinRoom() {
 		socket.emit('join-room', roomId);
 		
 		document.getElementById('join-screen').style.display = 'none';
-		document.getElementById('conference-screen').style.display = 'block';
+		document.getElementById('conference-screen').style.display = 'flex';
 		
 	} catch (error) {
 		console.error('Ошибка доступа к медиа:', error);

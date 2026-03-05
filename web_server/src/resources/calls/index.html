@@ -37,13 +37,14 @@
 					<input type="text" id="room-id" class="custom-input" placeholder="Введите ID комнаты">
 				</div>
 				
-				<div id="conference-screen" style="display: none;">
-					<div id="video-grid" class="video-grid"></div>
-					<div style="text-align: center; margin-top: 20px;">
-						<button onclick="toggleAudio()" id="audio-btn">Выключить звук</button>
-						<button onclick="toggleVideo()" id="video-btn">Выключить видео</button>
-						<button onclick="leaveRoom()" style="background: #e53e3e;">Покинуть</button>
+				<div id="conference-screen" class="container-conference" style="display: none;">
+					<div class="controls-grid">
+						<button onclick="navigator.clipboard.writeText(currentRoom);" class="custom-button">Код приглашения</button>
+						<button onclick="toggleAudio();" id="audio-btn" class="custom-button">Выключить звук</button>
+						<button onclick="toggleVideo();" id="video-btn" class="custom-button">Выключить видео</button>
+						<button onclick="leaveRoom();" class="custom-button exit-button">Завершить</button>
 					</div>
+					<div id="video-grid" class="video-grid"></div>
 				</div>
 			</div>
 		</div>
