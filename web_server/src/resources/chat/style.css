@@ -1,11 +1,3 @@
-html {
-	height: 100%;
-}
-
-body {
-	height: 100%;
-}
-
 .custom-button {
 	border-radius: 0px;
 	border: 0px;
@@ -17,26 +9,11 @@ body {
 	}
 }
 
-.main {
+.main-content {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	margin: 0 auto 0 auto;
-	
-	width: 70%;
-	height: calc(100% - 31.6px - 50px);
-	@media (max-aspect-ratio: 1/1) {
-		width: 100%;
-		height: calc(100% - 51.6px - 50px);
-	}
 
-	@media (min-aspect-ratio: 1/1) {
-		border-left: 2px solid;
-		border-right: 2px solid;
-	}
-	border-bottom: 2px solid;
-	border-color: #DD9E1F;
+	height: calc(100vh - 31.6px - 50px);
 }
 
 .main-header {
@@ -44,6 +21,7 @@ body {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	background-color: #FFFCDD;
 }
 
 .main-header div {
@@ -59,7 +37,6 @@ body {
 }
 
 .main-messages {
-	background-color: #FFFCDD;
 	width: 100%;
 	height: 100%;
 	overflow-y: auto;
@@ -69,7 +46,6 @@ body {
 }
 
 .main-message {
-	background-color: #FFFCDD;
 	display: flex;
 	flex-direction: row;
 	padding-left: 5px;
@@ -127,10 +103,12 @@ body {
 
 .main-footer-input input {
 	width: calc(100% - 10px);
-	height: 100%;
-	padding: 0px;
 	padding-left: 5px;
 	padding-right: 5px;
 	border: 0px;
-	outline: none;
+	border-bottom-left-radius: 15px;
+}
+
+.main-footer button {
+	border-bottom-right-radius: 15px;
 }

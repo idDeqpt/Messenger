@@ -79,4 +79,6 @@ body {
 	border-color: #DD9E1F;
 	border-radius: 5px;
 	outline: none;
+	font-family: inherit;
+	font-size: inherit;
 }
