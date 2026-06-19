@@ -1,0 +1,1 @@
+start "Messenger" ".\bin\Release\Messenger.exe" -c "certs/" -r "src/resources/" -p 443

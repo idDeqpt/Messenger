@@ -1,1 +1,0 @@
-start "web server" ".\bin\Debug\messenger_server.exe" 80

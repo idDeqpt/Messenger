@@ -1,155 +1,91 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <string>
-#include <memory>
 
-#include <functional>
-#include <unordered_map>
-#include <utility>
+#include <Network/ServerSessionData.hpp>
+#include <Network/Timer.hpp>
+#include <Network/WebServer.hpp>
+#include <Network/WebServerSecure.hpp>
 
-#include "Network/URL.hpp"
-#include "Network/HTTP.hpp"
-#include "Network/TCPServer.hpp"
-#include "Network/ServerSessionData.hpp"
-#include "Network/Timer.hpp"
-
-
-#ifdef _WIN32
-    #define WIN(exp) exp
-    #define NIX(exp)
-#else
-    #define WIN(exp)
-    #define NIX(exp) exp
-#endif
-
-
-std::string work_directory = "";
-
-
-std::string get_content_type(std::string path)
-{
-	if (path.find(".html") != std::string::npos)
-		return "text/html";
-	if (path.find(".css") != std::string::npos)
-		return "text/css";
-	if (path.find(".js") != std::string::npos)
-		return "application/javascript";
-	if (path.find(".png") != std::string::npos)
-		return "image/png";
-	return "text/plane";
-}
-
-
-std::unique_ptr<std::string> load_file_data_ptr(const std::string& path)
-{
-	std::ifstream file(path, std::ios::binary);
-
-	if (!file)
-		return std::unique_ptr<std::string>(nullptr);
-
-	std::ostringstream oss;
-	oss << file.rdbuf();
-	file.close();
-	return std::make_unique<std::string>(oss.str());
-}
-
-
-std::string request_handler(std::string request_data)
-{
-	net::HTTPResponse response;
-	net::HTTPRequest request(request_data);
-	net::URI uri(request.start_line[1]);
-	std::string path = uri.toString(false);
-
-	if (path.find(".") == std::string::npos)
-		path += "/index.html";
-
-	std::unique_ptr<std::string> data_ptr = load_file_data_ptr(work_directory + "resources" + path);
-	if (data_ptr == nullptr)
-	{
-		response.start_line[1] = "404";
-		response.start_line[2] = "NOT FOUND";
-		data_ptr = load_file_data_ptr(work_directory + "resources/404/index.html");
-	}
-	else
-	{
-		response.start_line[1] = "200";
-		response.start_line[2] = "OK";
-	}
-
-	response.body = *data_ptr;
-	response.start_line[0] = "HTTP/1.1";
-	
-	response.headers["Version"] = "HTTP/1.1";
-	response.headers["Content-Type"] = get_content_type(path) + "; charset=utf-8";
-	response.headers["Content-Length"] = std::to_string(response.body.length());
-
-	return response.toString();
-}
-
-void session_handler(net::TCPServer* server, int client_socket)
-{
-	server->send(client_socket, request_handler(server->recv(client_socket)));
-}
+#include <CLI/CommandLineOptions.hpp>
 
 
 int main(int argc, char* argv[])
 {
-	std::string path = argv[0];
-	int last_slash = path.rfind(
-		WIN("\\")
-		NIX("/")
-	);
-	work_directory = path.substr(0, last_slash + 1);
+	cli::OptionName certificates_option('c', "certificates");
+	cli::OptionName port_option('p', "port");
+	cli::OptionName resources_option('r', "resources");
 
+	cli::Options cli_options;
+	bool res = cli_options.parse(argc, argv, {
+		{certificates_option, cli::OptionType::ONE_ARGUMENT},
+		{port_option,         cli::OptionType::ONE_ARGUMENT},
+		{resources_option,    cli::OptionType::ONE_ARGUMENT}
+	});
+	if (res == false)
+	{
+		std::cout << "Command line reading error!" << std::endl;
+		system("pause");
+		return -1;
+	}
+
+	const std::string* argument = cli_options.getArgument(certificates_option);
+	std::string certs_dir = "";
+	bool use_tls = false;
+	if (argument != nullptr)
+	{
+		use_tls = true;
+		certs_dir = *argument;
+		if (certs_dir.size() && (certs_dir[certs_dir.size() - 1] != '/')) certs_dir += '/';
+	}
+
+	argument = cli_options.getArgument(port_option);
 	int port = -1;
-	if (argc > 1)
+	if (argument != nullptr)
 		try
 		{
-			port = std::stoi(std::string(argv[1]));
-			std::cout << "Port: " << port << std::endl;
+			port = std::stoi(*argument);
 		} catch (...) {}
+	if (port == -1)
+		port = (use_tls) ? 443 : 80;
 
-	while (port < 0)
+	argument = cli_options.getArgument(resources_option);
+	std::string res_dir = "";
+	if (argument != nullptr)
 	{
-		std::cout << "Enter the port: ";
-		std::string port_s;
-		std::cin >> port_s;
-		try
-		{
-			port = std::stoi(port_s);
-		}
-		catch (...)
-		{
-			std::cout << "Unexpected character!" << std::endl;
-		}
+		res_dir = *argument;
+		if (res_dir.size() && (res_dir[res_dir.size() - 1] != '/')) res_dir += '/';
 	}
 
-	net::TCPServer server;
-	server.setRequestHandler(session_handler);
-	int init_status = server.init(port);
+	net::TCPServer* server = (use_tls) ?
+		new net::WebServerSecure(certs_dir, res_dir) :
+		new net::WebServer(res_dir);
 
-	if (!server.start())
+	int init_status = server->init(port);
+
+	if (!server->start())
 	{
-		std::cout << "Server start incompleted: " << init_status << std::endl;
-		return 0;
+		std::cout << "Server start incompleted! Status: " << init_status << std::endl;
+		return -2;
 	}
-	std::cout << "Server start completed\n------------------------------------------------------------------------------------------\n";
+	std::cout << "Server start completed on port " << port << " " << (use_tls ? "with" : "without") << " TLS" << "\n------------------------------------------------\n";
 
 	Timer timer;
 	while(true)
 	{
-		if (server.hasNewSessionData())
+		if (server->hasNewSessionData())
 		{
 			static constexpr char* session_data_types[] = {"Open", "Close", "RECV", "Send"};
-			net::ServerSessionData session_data = server.getNextSessionData();
+			net::ServerSessionData session_data = server->getNextSessionData();
+			std::string data_str = session_data.getText();
+			if (data_str.length() > 1024) data_str.resize(1024);
 			std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
-			<< session_data.getText() << std::endl
+			<< data_str << std::endl
 			<< "==========================================================================================\n";
 		}
-		timer.sleep(100);
+		timer.sleep(50);
 	}
+
+	delete server;
 
 	system("pause");
 	return 0;
