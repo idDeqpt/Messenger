@@ -37,7 +37,7 @@ namespace handlers::http
                 parser.parse(request.body);
                 std::shared_ptr<jst::JSObject> request_data = std::static_pointer_cast<jst::JSObject>(parser.getParseResult());
                 
-                std::ofstream file("resources/profile_photos/" + user_id + ".png", std::ios::binary);
+                std::ofstream file(db::res_directory + "profile_photos/" + user_id + ".png", std::ios::binary);
                 file << Base64::decode(std::static_pointer_cast<jst::JSString>(request_data->operator[]("photo_64"))->getString());
                 file.close();
                 db::exec("UPDATE users SET has_profile_photo = 1 WHERE id = " + user_id);

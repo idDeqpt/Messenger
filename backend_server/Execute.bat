@@ -1,1 +1,0 @@
-start "back server" ".\bin\Debug\messenger_server.exe" 8000

@@ -1,81 +1,94 @@
 #include <iostream>
-#include <utility>
 #include <string>
 
-#include <Network/TCPServer.hpp>
 #include <Network/ServerSessionData.hpp>
 #include <Network/Timer.hpp>
 
-#ifdef _WIN32
-	#define WIN(exp) exp
-	#define NIX(exp)
-#else
-	#define WIN(exp)
-	#define NIX(exp) exp
-#endif
+#include <CLI/CommandLineOptions.hpp>
 
-#include "request_handlers/main_request_handler.hpp"
-#include "request_handlers/tools/database.hpp"
+#include "APIServer.hpp"
 
 
 int main(int argc, char* argv[])
 {
-	std::string path = argv[0];
-	int last_slash = path.rfind(
-		WIN("\\")
-		NIX("/")
-	);
-	db::work_directory = path.substr(0, last_slash + 1);
+	cli::OptionName certificates_option('c', "certificates");
+	cli::OptionName port_option('p', "port");
+	cli::OptionName resources_option('r', "resources");
 
-	int port = -1;
-	if (argc > 1)
-		try
-		{
-			port = std::stoi(std::string(argv[1]));
-			std::cout << "Port: " << port << std::endl;
-		} catch(...) {}
-
-	while (port < 0)
+	cli::Options cli_options;
+	bool res = cli_options.parse(argc, argv, {
+		{certificates_option, cli::OptionType::ONE_ARGUMENT},
+		{port_option,         cli::OptionType::ONE_ARGUMENT},
+		{resources_option,    cli::OptionType::ONE_ARGUMENT}
+	});
+	if (res == false)
 	{
-		std::cout << "Enter the port: ";
-		std::string port_s;
-		std::cin >> port_s;
-		try
-		{
-			port = std::stoi(port_s);
-		}
-		catch(...)
-		{
-			std::cout << "Unexpected character!" << std::endl;
-		}
-	}
-
-	net::TCPServer server;
-	server.setRequestHandler(request_handler);
-
-	int init_status = server.init(port);
-	if (!server.start())
-	{
-		std::cout << "Server start incompleted with code " << init_status << std::endl;
-
+		std::cout << "Command line reading error!" << std::endl;
 		system("pause");
-		return 0;
+		return -1;
 	}
-	std::cout << "Server start completed\n------------------------------------------------------------------------------------------\n";
+
+	const std::string* argument = cli_options.getArgument(certificates_option);
+	std::string certs_dir = "";
+	bool use_tls = false;
+	if (argument != nullptr)
+	{
+		use_tls = true;
+		certs_dir = *argument;
+		if (certs_dir.size() && (certs_dir[certs_dir.size() - 1] != '/')) certs_dir += '/';
+	}
+
+	argument = cli_options.getArgument(port_option);
+	int port = -1;
+	if (argument != nullptr)
+		try
+		{
+			port = std::stoi(*argument);
+		} catch (...) {}
+	if (port == -1)
+		port = (use_tls) ? 443 : 80;
+
+	argument = cli_options.getArgument(resources_option);
+	std::string res_dir = "";
+	if (argument != nullptr)
+	{
+		res_dir = *argument;
+		if (res_dir.size() && (res_dir[res_dir.size() - 1] != '/')) res_dir += '/';
+	}
+
+	db::res_directory = res_dir;
+	net::WebServer* server;
+	if (use_tls)
+		server = new app::APIServerSecure(certs_dir, res_dir);
+	else
+		server = new app::APIServer(res_dir);
+
+	int init_status = server->init(port);
+
+	if (!server->start())
+	{
+		std::cout << "Server start incompleted! Status: " << init_status << std::endl;
+		return -2;
+	}
+	std::cout << "Server start completed on port " << port << " " << (use_tls ? "with" : "without") << " TLS" << "\n------------------------------------------------\n";
 
 	Timer timer;
-	while (true)
+	while(true)
 	{
-		if (server.hasNewSessionData())
+		if (server->hasNewSessionData())
 		{
 			static constexpr char* session_data_types[] = {"Open", "Close", "RECV", "Send"};
-			net::ServerSessionData session_data = server.getNextSessionData();
+			net::ServerSessionData session_data = server->getNextSessionData();
+			std::string data_str = session_data.getText();
+			if (data_str.length() > 1024) data_str.resize(1024);
 			std::cout << session_data_types[session_data.getType()] << " " << session_data.getId() << " " << session_data.getTime() << "s:" << std::endl
-			<< session_data.getText() << std::endl
+			<< data_str << std::endl
 			<< "==========================================================================================\n";
 		}
-		timer.sleep(100);
+		timer.sleep(50);
 	}
+
+	delete server;
 
 	system("pause");
 	return 0;

@@ -1,0 +1,1 @@
+start "MessengerAPI" ".\bin\Debug\MessengerAPI.exe" -c "../certs/" -r "src/resources/" -p 8000

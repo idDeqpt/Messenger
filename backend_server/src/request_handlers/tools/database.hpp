@@ -12,7 +12,7 @@ namespace db
 {
 	typedef std::vector<std::unordered_map<std::string, std::string>> DataBuffer;
 
-	std::string work_directory = "";
+	std::string res_directory = "";
 
 	static int callback(void* data, int argc, char** argv, char** azColName) 
 	{
@@ -30,7 +30,7 @@ namespace db
 	{
 	    sqlite3 *db;
 	    char *errMessage = 0;
-	    int exit = sqlite3_open((work_directory + "resources/database.db").c_str(), &db); //global var, need fix
+	    int exit = sqlite3_open((res_directory + "database.db").c_str(), &db); //global var, need fix
 	    DataBuffer result;
 
 	    sqlite3_exec(db, request.c_str(), db::callback, (void*)&result, &errMessage);
