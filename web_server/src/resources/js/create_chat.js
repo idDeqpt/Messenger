@@ -4,7 +4,7 @@ async function create_chat(type, name)
 		type: type,
 		name: name
 	};
-	await check_token("http://" + api_host + "/create_chat",
+	await check_token("//" + api_host + "/create_chat",
 		{method: "POST", body: JSON.stringify(send_body)},
 		async function(response){
 			if (response.status == 404)

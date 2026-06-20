@@ -1,4 +1,4 @@
-const socket = io("http://birdplains.ru:8008");
+const socket = io("//" + video_host);
 let localStream;
 let peerConnections = {};
 let currentRoom = '';

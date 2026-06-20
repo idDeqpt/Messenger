@@ -21,7 +21,7 @@ function change_profile_photo(file)
 				photo_64: newImageUrl.slice(newImageUrl.indexOf(",") + 1)
 			};
 
-			check_token("http://" + api_host + "/change_profile_photo", {method: "POST", body: JSON.stringify(send_body)}, function(response){
+			check_token("//" + api_host + "/change_profile_photo", {method: "POST", body: JSON.stringify(send_body)}, function(response){
 				console.log(response.status);
 				if (response.status == 200)
 				{

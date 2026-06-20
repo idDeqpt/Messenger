@@ -1,1 +1,2 @@
-const api_host = "109.174.1.126:8000";
+const api_host   = "birdplains.ru:8000";
+const video_host = "birdplains.ru:8008";

@@ -8,15 +8,15 @@ project(${PROJECT_NAME} CXX)
 include(FetchContent)
 
 FetchContent_Declare(
-    network
-    GIT_REPOSITORY "https://github.com/idDeqpt/Network.git"
-    GIT_TAG 3c822f3ef08ea95de3e8e669f9e311432f2708c9
+	network
+	GIT_REPOSITORY "https://github.com/idDeqpt/Network.git"
+	GIT_TAG fc123e0a9f935772ae6928872e45a4ad18ac811f
 )
 
 FetchContent_Declare(
-    CLI
-    GIT_REPOSITORY "https://github.com/idDeqpt/CommandLineInterface.git"
-    GIT_TAG 7a63897b3b96b63574c35b12fd08edbc115c137e
+	CLI
+	GIT_REPOSITORY "https://github.com/idDeqpt/CommandLineInterface.git"
+	GIT_TAG 7a63897b3b96b63574c35b12fd08edbc115c137e
 )
 
 

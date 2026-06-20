@@ -5,7 +5,7 @@ let user_id = (self_page) ? JSON.parse(atob(token_payload))["id"] : params.get("
 if (self_page)
 	document.getElementById("main-content").innerHTML += "<div class=\"main-content-buttons\"><button class=\"custom-button\" onclick=\"window.location.assign('/profile/params' + document.location.search);\"><a>Параметры</a></button></div>";
 
-check_token("http://" + api_host + "/get_profile_data?id=" + user_id, {method: "GET"}, function(response){
+check_token("//" + api_host + "/get_profile_data?id=" + user_id, {method: "GET"}, function(response){
 	response.json().then(data => {
 		console.log(data);
 		document.getElementById("main-content-info-photo").setAttribute("src", "data:img/png;base64, " + data.profile_photo_64);
