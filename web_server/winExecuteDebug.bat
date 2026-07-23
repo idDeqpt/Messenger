@@ -1,0 +1,1 @@
+start "Messenger" ".\build\bin\Debug\Messenger.exe" -c "../certs/" -r "src/resources/" -p 443

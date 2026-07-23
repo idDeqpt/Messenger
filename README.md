@@ -22,11 +22,20 @@ ___
 ## Windows
 ```bash
 # Вариант 1: Использовать готовый скрипт
-GenerateRelease.bat
+winGenerateRelease.bat
 # Вариант 2: Вручную
 mkdir build && cd build
 cmake ..
 cmake --build . --config Release
+```
+## Windows
+```bash
+# Вариант 1: Использовать готовый скрипт
+linGenerateRelease.sh
+# Вариант 2: Вручную
+mkdir build
+cmake . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
 ```
 ___
 # Запуск

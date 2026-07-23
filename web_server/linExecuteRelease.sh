@@ -1,0 +1,1 @@
+./build/bin/Release/Messenger -p 8000 -r "./src/resources/"

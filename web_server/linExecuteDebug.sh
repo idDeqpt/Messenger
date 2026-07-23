@@ -1,0 +1,1 @@
+./build/bin/Debug/Messenger -p 8000 -r "./src/resources/"
