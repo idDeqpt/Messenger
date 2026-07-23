@@ -28,7 +28,7 @@ mkdir build && cd build
 cmake ..
 cmake --build . --config Release
 ```
-## Windows
+## Linux
 ```bash
 # Вариант 1: Использовать готовый скрипт
 linGenerateRelease.sh
